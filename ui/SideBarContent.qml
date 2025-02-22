@@ -1,5 +1,7 @@
 import QtQuick
 
+import "../common/"
+
 //侧边栏的按钮
 Item {
     id:sideBarButton
@@ -13,7 +15,7 @@ Item {
         anchors.centerIn: parent
         text: parent.title
 
-        color:sideBarButton.isSelected?"blue":"black"
+        color:sideBarButton.isSelected?ColorStyle.blue:"black"
     }
 
     MouseArea{
@@ -36,19 +38,17 @@ Item {
     }
 
     Rectangle{
+        //anchors.verticalCenter: parent
         anchors.leftMargin: parent
-        color: "blue"
+        color: ColorStyle.blue
 
         width: parent.width/20
         height: parent.height
 
+        radius:10
+
         visible: isSelected
 
-        gradient:Gradient{
-            orientation: Gradient.Vertical
-            GradientStop { position: 0.2; color: "white" }
-            GradientStop { position: 0.5; color: "blue" }
-            GradientStop { position: 0.8; color: "white" }
-        }
+
     }
 }

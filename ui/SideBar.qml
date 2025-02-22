@@ -2,33 +2,37 @@ import QtQuick
 Rectangle {
     id: sideBar
     color: "white"
-    // border.color: "gray"
-    // border.width: 2
+    visible:opacity>0.01
 
     property bool foldStatus: true
     property int selectedContent: 0
 
-    Behavior on foldStatus{
-        PropertyAnimation{
-            id: foldAnimation
-            target: sideBar
-            property: "x"
-            from: sideBar.foldStatus?-sideBar.width:0
-            to: sideBar.foldStatus?0:-sideBar.width
+
+    Behavior on opacity {
+        NumberAnimation {
             duration: 200
         }
     }
 
+    states: [
+        State {
+            name: "folded"
+            when: sideBar.foldStatus==true
+            PropertyChanges {target:sideBar;opacity:1}
+        },
+        State {
+            name: "unfolded"
+            when: sideBar.foldStatus==false
+            PropertyChanges {target:sideBar;opacity:0}
+        }
+    ]
+
     Column{
         id:column
         anchors.fill: parent
-        SideBarContent{//单纯占位的框
-            width: parent.width
-            height: parent.height/5
-        }
         SideBarContent{
             width: parent.width
-            height: parent.height/5
+            height: parent.height/4
             title: qsTr("View")
 
             //why Connections?
@@ -39,7 +43,7 @@ Rectangle {
         }
         SideBarContent{
             width: parent.width
-            height: parent.height/5
+            height: parent.height/4
             title: qsTr("Add view")
             isSelected:sideBar.selectedContent===1
             onClicked:{
@@ -48,7 +52,7 @@ Rectangle {
         }
         SideBarContent{
             width: parent.width
-            height: parent.height/5
+            height: parent.height/4
             title: qsTr("Setting")
             isSelected:sideBar.selectedContent===2
             onClicked:{
@@ -57,7 +61,7 @@ Rectangle {
         }
         SideBarContent{
             width: parent.width
-            height: parent.height/5
+            height: parent.height/4
             title: qsTr("Quit")
             onClicked: {
                 Qt.quit()

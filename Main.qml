@@ -13,18 +13,26 @@ Window {
 
 
     SideBarButton{
+        id:sideBarButton//open sideBar
         width:parent.width/8
         height:width
 
         onButtonClicked:sideBar.foldStatus=!sideBar.foldStatus
     }
 
+    Button{
+        anchors.top:sideBarButton.bottom
+        width:30
+        onClicked:console.log("hello")
+    }
+
     SideBar{
+        anchors.top:sideBarButton.bottom
         id:sideBar
         width: parent.width/6
-        height: parent.height
+        height: parent.height-sideBarButton.height
 
-        x: -width
     }
+
 
 }

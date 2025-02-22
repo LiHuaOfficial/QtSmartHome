@@ -12,6 +12,10 @@ qt_add_executable(appQtSmartHome
     main.cpp
 )
 
+# when using pragma Singleton
+set_source_files_properties(common/ColorStyle.qml
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(appQtSmartHome
     URI QtSmartHome
     VERSION 1.0
@@ -22,7 +26,10 @@ qt_add_qml_module(appQtSmartHome
         RESOURCES
         RESOURCES assets/geer_icon.png
         QML_FILES ui/SideBarContent.qml
-        QML_FILES common/Constants.qml
+        QML_FILES
+        QML_FILES
+        QML_FILES common/ColorStyle.qml
+        QML_FILES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
