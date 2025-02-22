@@ -7,7 +7,11 @@ Rectangle {
     property bool foldStatus: true
     property int selectedContent: 0
 
+    signal viewSwitched(int index)
 
+    onSelectedContentChanged:viewSwitched(selectedContent)
+
+    //和状态切换配合实现的淡入淡出动画
     Behavior on opacity {
         NumberAnimation {
             duration: 200
@@ -18,12 +22,12 @@ Rectangle {
         State {
             name: "folded"
             when: sideBar.foldStatus==true
-            PropertyChanges {target:sideBar;opacity:1}
+            PropertyChanges {sideBar.opacity:1}
         },
         State {
             name: "unfolded"
             when: sideBar.foldStatus==false
-            PropertyChanges {target:sideBar;opacity:0}
+            PropertyChanges {sideBar.opacity:0}
         }
     ]
 
@@ -63,11 +67,14 @@ Rectangle {
             width: parent.width
             height: parent.height/4
             title: qsTr("Quit")
+            isSelected:sideBar.selectedContent===3
             onClicked: {
-                Qt.quit()
+                sideBar.selectedContent=3;
             }
         }
     }
 
-
+    function setSelectedContent(index:int){
+        sideBar.selectedContent=index
+    }
 }
