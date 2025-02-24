@@ -1,7 +1,10 @@
 import QtQuick
 
+import "../common"
+
 Item {
     id: root
+
     property int selectedView: -1
     property int index: -1
 

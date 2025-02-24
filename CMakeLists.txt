@@ -34,6 +34,8 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES ui/AddView.qml
         QML_FILES ui/SettingView.qml
         QML_FILES ui/MainView.qml
+        QML_FILES ui/TopBar.qml
+        RESOURCES assets/house_icon.png
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

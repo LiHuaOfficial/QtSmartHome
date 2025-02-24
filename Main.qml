@@ -2,30 +2,38 @@ import QtQuick
 import QtQuick.Controls
 
 import "ui"
+import "common"
 
 Window {
     id: window
     visible: true
     width: 480
     height: 320
-    color: "white"
+    color: ColorStyle.greyLight1
     title:"SmartHome"
 
     property int selectedView: 0
 
-    SideBarButton{
-        id:sideBarButton//open sideBar
-        width:parent.width/8
-        height:width
+    // SideBarButton{
+    //     id:sideBarButton//open sideBar
+    //     width:parent.width/8
+    //     height:width
 
-        onButtonClicked:sideBar.foldStatus=!sideBar.foldStatus
+    //     onButtonClicked:sideBar.foldStatus=!sideBar.foldStatus
+    // }
+    TopBar{
+        id:topBar
+
+        width:window.width
+        height:window.height/8
+
+        onSideBarButtonClicked:sideBar.foldStatus=!sideBar.foldStatus
     }
-
     SideBar{
         id:sideBar
-        anchors.top:sideBarButton.bottom
+        anchors.top:topBar.bottom
         width: parent.width/6
-        height: parent.height-sideBarButton.height
+        height: parent.height-topBar.height
     }
 
     Item{
@@ -50,6 +58,7 @@ Window {
             selectedView:window.selectedView
         }
     }
+
     Connections {
         target: sideBar
         function onViewSwitched(index: int) {
