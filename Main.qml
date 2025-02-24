@@ -76,6 +76,8 @@ Window {
 
         anchors.centerIn:parent
 
+        modal: true
+
         visible: selectedView==3
         standardButtons: Dialog.Ok | Dialog.Cancel
 
