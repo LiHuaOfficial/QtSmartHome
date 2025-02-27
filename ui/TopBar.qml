@@ -3,7 +3,7 @@ import QtQuick
 Rectangle {
     id:topBar
 
-    property date currentDateTime: new Date()
+    //property date currentDateTime: new Date()
     signal sideBarButtonClicked
 
     Component.onCompleted: timer.start()
@@ -14,7 +14,7 @@ Rectangle {
 
         onTriggered:{
             timer.interval=1000*10//首次刷新后
-            currentDateTime=new Date()
+            var currentDateTime=Date()//qml has gc
             textTime.text = Qt.formatDateTime(currentDateTime,"hh:mm");
             textDate.text=Qt.formatDateTime(currentDateTime,"yyyy/MM/dd")
             //console.log("timer triggered")

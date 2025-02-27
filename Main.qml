@@ -4,6 +4,8 @@ import QtQuick.Controls
 import "ui"
 import "common"
 
+import QtSmartHome 1.0
+
 Window {
     id: window
     visible: true
@@ -64,6 +66,7 @@ Window {
         function onViewSwitched(index: int) {
             window.selectedView = index
             console.log("view switched",index)
+            pc.greet()
         }
     }
 
@@ -78,13 +81,18 @@ Window {
 
         modal: true
 
-        visible: selectedView==3
+        visible: window.selectedView==3
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: Qt.exit(0)
         onRejected: {
-            selectedView=0
+            window.selectedView=0
             sideBar.setSelectedContent(0)
         }
+    }
+
+    ProtocolControl{
+        id:pc
+        author:"hello"
     }
 }
