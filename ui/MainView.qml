@@ -17,7 +17,7 @@ BaseView {
 
         onTriggered:{
             base.tempInfo=base.tempInfo+1
-            console.log(DeviceManager.test())
+            //console.log(DeviceManager.test())
         }
     }
     ListModel{
