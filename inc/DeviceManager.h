@@ -6,15 +6,18 @@
 #include <QtQml/qqmlregistration.h>
 
 class DeviceManager:public QObject{
-    QObject
-
+    Q_OBJECT
     QML_ELEMENT
-
+    QML_SINGLETON
 public:
-    explicit DeviceManager(QObject* parent = nullptr) : QObject(parent) {}
     //生成或读取根目录下的config.JSON
-    bool initDevices();
+    DeviceManager();//需要explicit
 
+    Q_INVOKABLE QString test(){return testStr;};
+private:
+    static bool configLoaded;
+    QString testStr;
+    //QFile
 };
 
 #endif

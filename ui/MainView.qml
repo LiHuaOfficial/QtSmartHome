@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQml
 
+import QtSmartHome 1.0
+
 BaseView {
     id:base
     property int tempInfo: 0
@@ -15,6 +17,7 @@ BaseView {
 
         onTriggered:{
             base.tempInfo=base.tempInfo+1
+            console.log(DeviceManager.test())
         }
     }
     ListModel{
@@ -62,6 +65,10 @@ BaseView {
         }
     }
 
+    // DeviceManager{
+    //     id:deviceManager
+
+    // }
     //启动时读取本地设备（C++类管理设备，在这里实例化）
     //设备有唯一id
     //添加设备获得id

@@ -1,0 +1,30 @@
+/*
+用户不会访问到这个文件
+所以可以保证配置信息不会出错
+*/
+{
+    "devices":[
+        {
+            "name": "Device 1",
+            "type": "ble",
+            "configInfo":["ip","port"],//两个数组共同组成配置信息
+            "configInfoValue":["192.168.x.x","8080"],
+            "variable":{//变量信息（data还可以细分成即时和表格）
+                "command":["isOn","sendTemperature","isAvaliable"],
+                "data":["temprature","CO2Density"]
+            },
+            "displayedInfo":"None"//显示在小图标上的信息，是变量信息的其中之一
+        },
+        {
+            "name": "Device 2",
+            "type": "socket",
+            "configInfo":["macAddr","xxxx"],
+            "configInfoValue":["xxxxxx","xxxx"],
+            "variable":{
+                "command":["open","close","start"],
+                "data":["count","check"]
+            },
+            "displayedInfo":"Temperature"
+        }
+    ]
+}
