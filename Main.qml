@@ -11,20 +11,15 @@ Window {
     visible: true
     width: 480
     height: 320
-    color: ColorStyle.greyLight1
+    color: ColorStyle.greyLight3
     title:"SmartHome"
 
     property int selectedView: 0
 
-    // SideBarButton{
-    //     id:sideBarButton//open sideBar
-    //     width:parent.width/8
-    //     height:width
-
-    //     onButtonClicked:sideBar.foldStatus=!sideBar.foldStatus
-    // }
     TopBar{
         id:topBar
+
+        z:5
 
         width:window.width
         height:window.height/8
@@ -33,13 +28,21 @@ Window {
     }
     SideBar{
         id:sideBar
+
+        z:5
+
         anchors.top:topBar.bottom
         width: parent.width/6
         height: parent.height-topBar.height
     }
 
     Item{
-        anchors.fill:parent
+        z:0
+
+        anchors.top:topBar.bottom
+
+        width:parent.width
+        height:parent.height-topBar.height
 
         MainView{
             id:mainView

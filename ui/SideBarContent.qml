@@ -45,9 +45,9 @@ Item {
         width: parent.width/20
         height: parent.height
 
-        radius:10
+        radius:width/2
 
-        visible: isSelected
+        visible: sideBarButton.isSelected
 
 
     }

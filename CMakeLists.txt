@@ -41,7 +41,10 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES ui/MainView.qml
         QML_FILES ui/TopBar.qml
         RESOURCES assets/house_icon.png
-        SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h #DEPENDENCIES QObject
+        SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h
+        QML_FILES ui/DeviceApp.qml
+        SOURCES inc/DeviceManager.h
+        SOURCES src/DeviceManager.cpp #DEPENDENCIES QObject
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
