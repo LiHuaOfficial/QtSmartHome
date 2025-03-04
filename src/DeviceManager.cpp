@@ -1,6 +1,25 @@
 #include "inc/DeviceManager.h"
+#include "DeviceInfo.h"
+#include <cstdio>
+#include <qcontainerfwd.h>
+#include <qdebug.h>
+#include <qjsonarray.h>
+#include <qjsonobject.h>
+#include <qlogging.h>
 
+void ConvertJsonArrayToQVector(QJsonArray &jsonArray, QVector<QString> &vector) {
+    for (int i = 0; i < jsonArray.size(); i++) {
+        vector.push_back(jsonArray.at(i).toString());
+    }
+}
 DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()+"/config.json"){
+    qDebug()<<configFile.fileName();
+    
+    //初始化所有id以待取用，（初始化移到初始化QMLengine前会不会好些？）
+    for(int i=1;i<=MAX_ID_NUM;i++){
+        idSet.insert(i);
+    }
+
     //读取或创建JSON配置信息
     if(!configFile.exists()){
         //仅创建结构,源程序根目录下有JSON文件的格式
@@ -14,10 +33,48 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
         }else{
             //文件打开失败，发送信号，前端至少得显示吧
         }
-    }
-    //初始化所有id以待取用，（初始化移到初始化QMLengine前会不会好些？）
-    for(int i=1;i<=MAX_ID_NUM;i++){
-        idSet.insert(i);
+    }else{
+        //读取JSON文件
+        if(configFile.open(QIODevice::ReadOnly)){
+            QJsonDocument doc=QJsonDocument::fromJson(configFile.readAll());
+            QJsonObject rootObj=doc.object();
+            QJsonArray devicesArray=rootObj.value("devices").toArray();
+            for(int i=0;i<devicesArray.size();i++){
+                QJsonObject deviceObj=devicesArray.at(i).toObject();
+
+                QJsonArray cfgInfo=deviceObj.value("config").toArray();
+                QJsonObject variables=deviceObj.value("variables").toObject();
+                QJsonArray varCmd=variables.value("command").toArray();
+                QJsonArray varData=variables.value("data").toArray();
+                QJsonArray varDataOnChart=variables.value("dataOnChart").toArray();
+
+                QVector<QString> vecCfgInfo,vecVarCmd,vecVarData,vecVarDataOnChart;
+                
+                ConvertJsonArrayToQVector(cfgInfo,vecCfgInfo);
+                ConvertJsonArrayToQVector(varCmd,vecVarCmd);
+                ConvertJsonArrayToQVector(varData,vecVarData);  
+                ConvertJsonArrayToQVector(varDataOnChart,vecVarDataOnChart);
+
+                QVector<QVector<QString>> vec={vecVarCmd,vecVarData,vecVarDataOnChart};
+                DeviceInfo info(deviceObj.value("name").toString(),
+                                static_cast<DeviceInfo::DeviceType>(deviceObj.value("type").toInt()),
+                                vecCfgInfo,
+                                vec,
+                                deviceObj.value("variableOnApp").toString());
+                
+                //DeviceInfo info;
+
+                int infoCode=info.isBadInfo();
+                if(!infoCode) {
+                    idInfoMap.insert(getID(),info);
+                    qDebug()<<"info added\n";
+                }else{
+                    qDebug()<<QString("Error:infocode %1").arg(infoCode);
+                }
+                
+            }
+            configFile.close();
+        }
     }
     //把信息装入DeviceInfo
     //分配id，后续前端也可以通过map访问通信对象
@@ -26,9 +83,10 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
     //(通信不要写在主线程里面！！！)
     //所以在id实例化前id还是用map对应配置信息
 
-    //DeviceInfo待实现，先实现ID功能
-    //对每一个deviceInfo
-    //idInfoMap[getID()]=DeviceInfo
+    /*
+    在MainView中onComplete时读入
+    */
+    
 }
 
 int DeviceManager::getID(){
@@ -45,6 +103,7 @@ bool DeviceManager::freeID(int id){
     return idSet.insert(id).second;
 }
 
+//将信息固化到本地
 int DeviceManager::addDevice(DeviceInfo info){
 
 }

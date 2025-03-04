@@ -19,6 +19,14 @@ public:
     //生成或读取根目录下的config.JSON
     explicit DeviceManager();
 
+    //在QML前初始化
+    static DeviceManager* create(QQmlEngine* engine, QJSEngine* scriptEngine) {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        static DeviceManager instance;
+        return &instance;
+    };
+
     Q_INVOKABLE QString test(){return testStr;};
     Q_INVOKABLE int addDevice(DeviceInfo info);
 signals:

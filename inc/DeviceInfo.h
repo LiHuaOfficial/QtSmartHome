@@ -5,10 +5,59 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
+/*
+这个类用于校验不同类型设备的ConfigInfo和ConfigInfoValue是否符合要求
+*/
+class DeviceInfoCheck{
+public:
+    virtual ~DeviceInfoCheck(){};
+    //校验值的合法性返回不合法值的位置，0表示合法
+    virtual int checkInfo(QVector<QString>& cfgInfo)=0;
+};
+
+class DeviceInfoCheckSocket:public DeviceInfoCheck{
+public:
+    ~DeviceInfoCheckSocket()override {};
+
+    const QVector<QString> socketInfo={"ip","port"};
+    //校验值的合法性返回不合法值的位置，0表示合法，1表示ip不合法，.......
+    int checkInfo(QVector<QString>& cfgInfo) override;
+};
+
 class DeviceInfo{
 public:
-    DeviceInfo(QString dvName):deviceName(){};
+    enum DeviceType{Socket,BLE,HTTP};
+
+    DeviceInfo(){};
+    DeviceInfo(QString dvName,DeviceType dvType,QVector<QString> cfgInfoValue,
+               QVector<QVector<QString>> vars,QString varOnApp):deviceName(dvName),deviceType(dvType),
+                configInfoValue(cfgInfoValue),variables(vars),variableOnApp(varOnApp){
+        switch (dvType) {
+        case Socket:
+            check=new DeviceInfoCheckSocket();
+            break;
+        default:
+            break;
+        }
+        badInfo=check->checkInfo(cfgInfoValue);
+    };
+
+    //vaild Info returns false
+    int isBadInfo(){return badInfo;};
+
+    ~DeviceInfo(){
+        delete check;
+    };
+
 private:
+    int8_t badInfo;
+
     QString deviceName;
+    DeviceType deviceType;
+    QVector<QString> configInfoValue;
+    QVector<QVector<QString>> variables;
+    QString variableOnApp;
+
+    DeviceInfoCheck* check;
 };
 #endif
