@@ -67,7 +67,7 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
                 int infoCode=info.isBadInfo();
                 if(!infoCode) {
                     idInfoMap.insert(getID(),info);
-                    qDebug()<<"info added\n";
+                    qDebug()<<"info added";
                 }else{
                     qDebug()<<QString("Error:infocode %1").arg(infoCode);
                 }

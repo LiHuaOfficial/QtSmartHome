@@ -15,7 +15,7 @@ qt_add_executable(appQtSmartHome
 )
 
 #help finding headers(qml module create by cpp)
-target_include_directories(appQtSmartHome PRIVATE inc)
+target_include_directories(appQtSmartHome PRIVATE inc common)
 
 # when using pragma Singleton
 set_source_files_properties(common/ColorStyle.qml
@@ -28,7 +28,6 @@ qt_add_qml_module(appQtSmartHome
         Main.qml
         QML_FILES ui/SideBar.qml
         QML_FILES ui/SideBarButton.qml
-        RESOURCES
         RESOURCES assets/geer_icon.png
         QML_FILES ui/SideBarContent.qml
         QML_FILES
@@ -40,12 +39,12 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES ui/SettingView.qml
         QML_FILES ui/MainView.qml
         QML_FILES ui/TopBar.qml
-        RESOURCES assets/house_icon.png
+        RESOURCES assets/house_icon.png assets/bluetooth_icon.png assets/wifi_icon.png assets/http_icon.png
         SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h
         QML_FILES ui/DeviceApp.qml
         SOURCES inc/DeviceManager.h
         SOURCES src/DeviceManager.cpp
-        SOURCES
+        SOURCES common/QtSmartHomeGlobal.h
         SOURCES
         SOURCES src/DeviceInfo.cpp
         SOURCES

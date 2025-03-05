@@ -21,18 +21,21 @@ BaseView {
         }
     }
     ListModel{
-        id:modelH
+        id:modelApp
         ListElement {
             active:true
             name:"Hello"
+            deviceType:QtSmartHomeGlobal.Socket
         }
         ListElement {
             active:false
             name:"Test"
+            deviceType:QtSmartHomeGlobal.BLE
         }
         ListElement {
             active:true
             name:"TEST"
+            deviceType:QtSmartHomeGlobal.HTTP
         }
         // ListElement {
         //     info:base.tempInfo
@@ -44,7 +47,7 @@ BaseView {
         width:parent.width/10
         onClicked:{
             console.log("main btn clicked")
-            modelH.append({name:base.tempInfo.toString()})
+            modelApp.append({name:base.tempInfo.toString(),deviceType:QtSmartHomeGlobal.BLE})
         }
     }
     GridView {
@@ -57,11 +60,13 @@ BaseView {
 
         cellWidth:appWidth*1.1
         cellHeight:appWidth*1.1
-        model:modelH
+
+        model:modelApp
         delegate: DeviceApp{
             info:name
             isActivate:active
             width:gridView.appWidth
+            type:deviceType
         }
     }
 
@@ -70,30 +75,15 @@ BaseView {
 
     // }
     //启动时读取本地设备（C++类管理设备，在这里实例化）
+    Component.onCompleted: {
+        //遍历Map，添加至ListModel
+    }
     //设备有唯一id
     //添加设备获得id
     //id可以访问到设备信息
 
     //此处要求id可以获取到element并更新信息
-    function add(){
+    function addDevice(){
 
     }
 }
-// Item{
-//     width:20
-//     height:20
-//     Rectangle{
-//         color:"red"
-//         anchors.fill:parent
-//     }
-//     Column {
-//         Text { text: portrait; anchors.horizontalCenter: parent.horizontalCenter }
-//         Text { text: name; anchors.horizontalCenter: parent.horizontalCenter }
-//     }
-//     MouseArea {
-//         anchors.fill: parent;
-//         onClicked: {
-//              console.log("Listview item clicked")
-//         }
-//     }
-// }

@@ -5,6 +5,8 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
+#include "common/QtSmartHomeGlobal.h"
+
 /*
 这个类用于校验不同类型设备的ConfigInfo和ConfigInfoValue是否符合要求
 */
@@ -26,14 +28,15 @@ public:
 
 class DeviceInfo{
 public:
-    enum DeviceType{Socket,BLE,HTTP};
-
+    //enum DeviceType{Socket,BLE,HTTP};
+    using DeviceType=QtSmartHomeGlobal::DeviceType;
+    
     DeviceInfo(){};
     DeviceInfo(QString dvName,DeviceType dvType,QVector<QString> cfgInfoValue,
                QVector<QVector<QString>> vars,QString varOnApp):deviceName(dvName),deviceType(dvType),
                 configInfoValue(cfgInfoValue),variables(vars),variableOnApp(varOnApp){
         switch (dvType) {
-        case Socket:
+        case DeviceType::Socket:
             check=new DeviceInfoCheckSocket();
             break;
         default:

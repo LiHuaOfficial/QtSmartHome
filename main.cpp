@@ -4,6 +4,7 @@
 
 #include "inc/ProtocolControl.h"
 #include "inc/DeviceManager.h"
+#include "common/QtSmartHomeGlobal.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,8 +14,8 @@ int main(int argc, char *argv[])
 
     DeviceManager::create(nullptr, nullptr);//需要提前初始化，否则QML中无法访问？？？
     qmlRegisterType<ProtocolControl>("QtSmartHome", 1, 0, "ProtocolControl");
-    qmlRegisterSingletonType<DeviceManager>("com.example", 1, 0, "DeviceManager", DeviceManager::create);
-
+    qmlRegisterSingletonType<DeviceManager>("QtSmartHome", 1, 0, "DeviceManager", DeviceManager::create);
+    qmlRegisterUncreatableType<QtSmartHomeGlobal>("QtSmartHome", 1, 0, "QtSmartHomeGlobal", "Cannot instantiate global type");
     QQmlApplicationEngine engine;
     
     QObject::connect(

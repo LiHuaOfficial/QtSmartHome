@@ -40,6 +40,7 @@ private:
     QFile configFile;
     IDSet idSet;
     IDInfoMap idInfoMap;
+    
     //通过id找到对应信息，要求QML也能访问（用方法实现访问比较好）
 
 
