@@ -20,27 +20,7 @@ BaseView {
             //console.log(DeviceManager.test())
         }
     }
-    ListModel{
-        id:modelApp
-        ListElement {
-            active:true
-            name:"Hello"
-            deviceType:QtSmartHomeGlobal.Socket
-        }
-        ListElement {
-            active:false
-            name:"Test"
-            deviceType:QtSmartHomeGlobal.BLE
-        }
-        ListElement {
-            active:true
-            name:"TEST"
-            deviceType:QtSmartHomeGlobal.HTTP
-        }
-        // ListElement {
-        //     info:base.tempInfo
-        // }
-    }
+
     Button{
         z:2
         anchors.right:parent.right
@@ -61,7 +41,24 @@ BaseView {
         cellWidth:appWidth*1.1
         cellHeight:appWidth*1.1
 
-        model:modelApp
+        model:ListModel{
+            id:modelApp
+            ListElement {
+                active:true
+                name:"Hello"
+                deviceType:QtSmartHomeGlobal.Socket
+            }
+            ListElement {
+                active:false
+                name:"Test"
+                deviceType:QtSmartHomeGlobal.BLE
+            }
+            ListElement {
+                active:true
+                name:"TEST"
+                deviceType:QtSmartHomeGlobal.HTTP
+            }
+        }
         delegate: DeviceApp{
             info:name
             isActivate:active
@@ -76,7 +73,19 @@ BaseView {
     // }
     //启动时读取本地设备（C++类管理设备，在这里实例化）
     Component.onCompleted: {
+        console.log("main view completed")
         //遍历Map，添加至ListModel
+        //需要name id variables displayedInfo
+        let id=0
+        while ((id=DeviceManager.orderlyGetID())!=-1) {
+            let infoMap=DeviceManager.getDeviceInfo(id)
+            //console.log(infoMap)
+            modelApp.append({
+                             name:infoMap["name"],
+                             deviceType:infoMap["type"]
+                             })
+        }
+
     }
     //设备有唯一id
     //添加设备获得id

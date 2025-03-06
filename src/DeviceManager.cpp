@@ -17,7 +17,7 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
     
     //初始化所有id以待取用，（初始化移到初始化QMLengine前会不会好些？）
     for(int i=1;i<=MAX_ID_NUM;i++){
-        idSet.insert(i);
+        freeIdSet.insert(i);
     }
 
     //读取或创建JSON配置信息
@@ -44,25 +44,17 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
 
                 QJsonArray cfgInfo=deviceObj.value("config").toArray();
                 QJsonObject variables=deviceObj.value("variables").toObject();
-                QJsonArray varCmd=variables.value("command").toArray();
-                QJsonArray varData=variables.value("data").toArray();
-                QJsonArray varDataOnChart=variables.value("dataOnChart").toArray();
-
+                
                 QVector<QString> vecCfgInfo,vecVarCmd,vecVarData,vecVarDataOnChart;
                 
                 ConvertJsonArrayToQVector(cfgInfo,vecCfgInfo);
-                ConvertJsonArrayToQVector(varCmd,vecVarCmd);
-                ConvertJsonArrayToQVector(varData,vecVarData);  
-                ConvertJsonArrayToQVector(varDataOnChart,vecVarDataOnChart);
 
                 QVector<QVector<QString>> vec={vecVarCmd,vecVarData,vecVarDataOnChart};
                 DeviceInfo info(deviceObj.value("name").toString(),
                                 static_cast<DeviceInfo::DeviceType>(deviceObj.value("type").toInt()),
                                 vecCfgInfo,
-                                vec,
+                                variables.toVariantMap(),
                                 deviceObj.value("variableOnApp").toString());
-                
-                //DeviceInfo info;
 
                 int infoCode=info.isBadInfo();
                 if(!infoCode) {
@@ -90,9 +82,10 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
 }
 
 int DeviceManager::getID(){
-    if(!idSet.empty()){
-        int res=*idSet.begin();
-        idSet.erase(idSet.begin());
+    if(!freeIdSet.empty()){
+        int res=*freeIdSet.begin();
+        freeIdSet.erase(freeIdSet.begin());
+        idSet.insert(res);
         return res;
     }else{
         return -1;
@@ -100,10 +93,21 @@ int DeviceManager::getID(){
 }
 
 bool DeviceManager::freeID(int id){
-    return idSet.insert(id).second;
+    idSet.erase(id);
+    return freeIdSet.insert(id).second;
 }
 
 //将信息固化到本地
 int DeviceManager::addDevice(DeviceInfo info){
 
+}
+
+int DeviceManager::orderlyGetID(){
+    static auto it=idSet.begin();
+    if(it==idSet.end()){
+        it=idSet.begin();
+        return -1;
+    }else{
+        return *it++;
+    }
 }

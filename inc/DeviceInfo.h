@@ -4,6 +4,7 @@
 #include <QtQml>
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
+#include <qcontainerfwd.h>
 
 #include "common/QtSmartHomeGlobal.h"
 
@@ -33,17 +34,25 @@ public:
     
     DeviceInfo(){};
     DeviceInfo(QString dvName,DeviceType dvType,QVector<QString> cfgInfoValue,
-               QVector<QVector<QString>> vars,QString varOnApp):deviceName(dvName),deviceType(dvType),
-                configInfoValue(cfgInfoValue),variables(vars),variableOnApp(varOnApp){
+        QVariantMap vars,QString varOnApp):deviceName(dvName),deviceType(dvType),
+                configInfoValue(cfgInfoValue),variablesMap(vars),variableOnApp(varOnApp){
         switch (dvType) {
         case DeviceType::Socket:
             check=new DeviceInfoCheckSocket();
             break;
         default:
+            return;//没实现功能的就不校验了
             break;
         }
         badInfo=check->checkInfo(cfgInfoValue);
     };
+
+    //void setVariablesMap(QVariantMap map){variablesMap=map;};
+
+    //try not to save the reference
+    QVariantMap& getDeviceVariablesMap(){return variablesMap;};
+    QString& getDeviceName(){return deviceName;};
+    DeviceType& getDeviceType(){return deviceType;};
 
     //vaild Info returns false
     int isBadInfo(){return badInfo;};
@@ -52,13 +61,14 @@ public:
         delete check;
     };
 
-private:
+//private:
     int8_t badInfo;
 
     QString deviceName;
     DeviceType deviceType;
     QVector<QString> configInfoValue;
-    QVector<QVector<QString>> variables;
+    //QVector<QVector<QString>> variables;
+    QVariantMap variablesMap;
     QString variableOnApp;
 
     DeviceInfoCheck* check;

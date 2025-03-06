@@ -4,6 +4,8 @@
 #include <QtQml>
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
+#include <qtmetamacros.h>
+#include <qvariant.h>
 #include <set>
 #include <QMap>
 
@@ -29,6 +31,17 @@ public:
 
     Q_INVOKABLE QString test(){return testStr;};
     Q_INVOKABLE int addDevice(DeviceInfo info);
+
+    //(会不会有被并发访问的问题)从第一个值开始，每调用一次返回一个ID，直到返回-1
+    Q_INVOKABLE int orderlyGetID();
+
+    //Map中仅包含variables信息
+    Q_INVOKABLE QVariantMap getDeviceInfo(int id){
+        auto variablesMap=idInfoMap[id].getDeviceVariablesMap();//command,data,dataOnChart
+        variablesMap.insert("name",idInfoMap[id].getDeviceName());
+        variablesMap.insert("type",idInfoMap[id].getDeviceType());
+        return variablesMap;
+    };
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
     void error_json(int idx);
@@ -38,7 +51,9 @@ private:
 
     QString testStr;
     QFile configFile;
-    IDSet idSet;
+
+    IDSet freeIdSet,idSet;
+    
     IDInfoMap idInfoMap;
     
     //通过id找到对应信息，要求QML也能访问（用方法实现访问比较好）
