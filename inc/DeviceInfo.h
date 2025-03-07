@@ -49,9 +49,11 @@ public:
 
     //void setVariablesMap(QVariantMap map){variablesMap=map;};
 
-    //try not to save the reference
+    //return reference
     QVariantMap& getDeviceVariablesMap(){return variablesMap;};
+    //return reference
     QString& getDeviceName(){return deviceName;};
+    //return reference
     DeviceType& getDeviceType(){return deviceType;};
 
     //vaild Info returns false

@@ -33,7 +33,7 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES
         QML_FILES
         QML_FILES common/ColorStyle.qml
-        QML_FILES
+        QML_FILES ui/ViewRowItem.qml
         QML_FILES ui/BaseView.qml
         QML_FILES ui/AddView.qml
         QML_FILES ui/SettingView.qml
@@ -47,7 +47,7 @@ qt_add_qml_module(appQtSmartHome
         SOURCES common/QtSmartHomeGlobal.h
         SOURCES
         SOURCES src/DeviceInfo.cpp
-        SOURCES
+        SOURCES 
         SOURCES inc/DeviceInfo.h     #DEPENDENCIES QObject
 )
 
