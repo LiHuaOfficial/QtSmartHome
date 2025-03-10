@@ -28,6 +28,10 @@ BaseView {
         onClicked:{
             console.log("main btn clicked")
             modelApp.append({name:base.tempInfo.toString(),deviceType:QtSmartHomeGlobal.BLE})
+
+            for(var i=0;i<gridView.count;i++){
+                console.log(modelApp.get(i).deviceid)//id是modelApp中的值，Id是DeviceApp中的变量
+            }
         }
     }
     GridView {
@@ -44,6 +48,7 @@ BaseView {
         model:ListModel{
             id:modelApp
             ListElement {
+                deviceid:11
                 active:true
                 name:"Hello"
                 deviceType:QtSmartHomeGlobal.Socket
@@ -60,6 +65,7 @@ BaseView {
             }
         }
         delegate: DeviceApp{
+            deviceId:deviceid
             info:name
             isActivate:active
             width:gridView.appWidth
@@ -75,12 +81,13 @@ BaseView {
     Component.onCompleted: {
         console.log("main view completed")
         //遍历Map，添加至ListModel
-        //需要name id variables displayedInfo
+        //需要name id variables displayedInfo(viariable可以在展开后再显示，不放在GridView中)
         let id=0
         while ((id=DeviceManager.orderlyGetID())!=-1) {
             let infoMap=DeviceManager.getDeviceInfo(id)
             //console.log(infoMap)
             modelApp.append({
+                             deviceid:id,//DeviceManger可以获取id对应信息
                              name:infoMap["name"],
                              deviceType:infoMap["type"]
                              })

@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
+
+
 project(QtSmartHome VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -9,6 +11,8 @@ set(QT_QML_GENERATE_QMLLS_INI ON)#generate .qmlls.ini needed by language server,
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.5)
+
+qt_policy(SET QTP0004 NEW)
 
 qt_add_executable(appQtSmartHome
     main.cpp
@@ -40,6 +44,7 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES ui/MainView.qml
         QML_FILES ui/TopBar.qml
         RESOURCES assets/house_icon.png assets/bluetooth_icon.png assets/wifi_icon.png assets/http_icon.png
+        RESOURCES assets/app_icon_ai.png assets/app_icon_ai.ico
         SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h
         QML_FILES ui/DeviceApp.qml
         SOURCES inc/DeviceManager.h

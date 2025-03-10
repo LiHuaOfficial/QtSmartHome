@@ -7,7 +7,8 @@ Rectangle {
     property string info:"None"
     property bool isActivate: false
     property int type
-
+    property int deviceId
+    
     width:40
     height:width
 

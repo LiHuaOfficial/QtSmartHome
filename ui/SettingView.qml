@@ -9,10 +9,18 @@ BaseView {
     //     text: "settingview"
     // }
 
+    Flickable {
+        id: flickable
+        anchors.fill: parent
+
+        contentHeight: column.childrenRect.height
+        anchors.topMargin:10
         Column{
             id:column
-            anchors.fill: settingView
-            anchors.topMargin:10
+            //anchors.fill: parent
+            width:settingView.width
+            height:settingView.height
+            
             spacing: 10
             ViewRowItem{
                 choosedComponent: 'switch'
@@ -24,15 +32,16 @@ BaseView {
                 choosedComponent: 'default'
             }
             ViewRowItem{
-                choosedComponent: 'default'
+                choosedComponent: 'switch'
             }
             ViewRowItem{
-                choosedComponent: 'default'
+                choosedComponent: 'comboBox'
+                comboBoxList: ['蓝牙', 'Wi-Fi', 'GPS']
             }
             ViewRowItem{
                 choosedComponent: 'default'
             }
         }
-    
+    }
     
 }

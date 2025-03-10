@@ -69,7 +69,7 @@ Window {
         function onViewSwitched(index: int) {
             window.selectedView = index
             console.log("view switched",index)
-            pc.greet()
+            //pc.greet()
         }
     }
 
@@ -94,8 +94,8 @@ Window {
         }
     }
 
-    ProtocolControl{
-        id:pc
-        author:"hello"
-    }
+    // ProtocolControl{
+    //     id:pc
+    //     author:"hello"
+    // }
 }

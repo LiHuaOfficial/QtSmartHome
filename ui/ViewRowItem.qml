@@ -1,8 +1,9 @@
-//pragma ComponentBehavior: Bound
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
 
+//这个是设置界面/添加界面每一行的item
 Rectangle{
     id:rowItem
     color: "white"
@@ -10,8 +11,12 @@ Rectangle{
 
     width: parent.width
     height: parent.height/5
+
     property string choosedComponent: 'default'
     property string componentDiscription: 'None'
+    property var comboBoxList: ['中文', 'English', 'Español']
+
+    
 
     Text{
         anchors.left: parent.left
@@ -66,7 +71,7 @@ Rectangle{
             width:parent.width/5
             height:parent.height*0.7
             anchors.rightMargin: parent.width/15
-            model: ["中文", "English", "Español"]
+            model: rowItem.comboBoxList
             currentIndex: 0
         }
     }

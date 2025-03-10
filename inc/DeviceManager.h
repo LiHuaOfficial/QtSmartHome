@@ -40,6 +40,7 @@ public:
         auto variablesMap=idInfoMap[id].getDeviceVariablesMap();//command,data,dataOnChart
         variablesMap.insert("name",idInfoMap[id].getDeviceName());
         variablesMap.insert("type",idInfoMap[id].getDeviceType());
+        //variablesMap.insert("id",)
         return variablesMap;
     };
 signals:
