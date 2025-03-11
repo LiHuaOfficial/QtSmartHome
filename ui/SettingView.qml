@@ -35,8 +35,19 @@ BaseView {
                 choosedComponent: 'switch'
             }
             ViewRowItem{
+                id:testRowItem
                 choosedComponent: 'comboBox'
                 comboBoxList: ['蓝牙', 'Wi-Fi', 'GPS']
+                defaultItemStatus: 0
+                // onRowItemTriggered: {
+                //     console.log("comboBox triggered")
+                // }
+            }
+            Connections{
+                target:testRowItem
+                function onRowItemTriggered(result: int){
+                    console.log("comboBox triggered",result)
+                }
             }
             ViewRowItem{
                 choosedComponent: 'default'

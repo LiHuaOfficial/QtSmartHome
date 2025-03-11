@@ -15,8 +15,10 @@ Rectangle{
     property string choosedComponent: 'default'
     property string componentDiscription: 'None'
     property var comboBoxList: ['中文', 'English', 'Español']
+    property int defaultItemStatus: 0 
 
-    
+    //上层统一处理,Combox的选择,switch的开关
+    signal rowItemTriggered(int result)
 
     Text{
         anchors.left: parent.left
@@ -60,8 +62,10 @@ Rectangle{
         Switch {
             width:parent.width/4
             height:parent.height
-            checked: true
-            
+            checked: rowItem.defaultItemStatus
+            onCheckedChanged:{
+                rowItem.rowItemTriggered(checked)
+            }
         }
     }
 
@@ -72,7 +76,10 @@ Rectangle{
             height:parent.height*0.7
             anchors.rightMargin: parent.width/15
             model: rowItem.comboBoxList
-            currentIndex: 0
+            currentIndex: rowItem.defaultItemStatus
+            onCurrentIndexChanged:{
+                rowItem.rowItemTriggered(currentIndex)
+            }
         }
     }
 
