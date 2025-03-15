@@ -29,10 +29,11 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("QtSmartHome", "Main");
     
+    //添加图标
     if (!engine.rootObjects().isEmpty()) {
         auto window = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
         if (window) {
-            qDebug() << "window is not empty"<<QCoreApplication::applicationDirPath();
+            //qDebug() << "window is not empty"<<QCoreApplication::applicationDirPath();
             QIcon icon("../assets/app_icon_ai.png");
             window->setIcon(icon);  
         }

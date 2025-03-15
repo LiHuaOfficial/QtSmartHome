@@ -21,4 +21,5 @@ QtObject {
     readonly property color greyDark4: "#3d464d";
     readonly property color greyDark5: "#303233";
     readonly property color white: "#ffffff";
+
 }

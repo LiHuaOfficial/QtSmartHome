@@ -26,7 +26,16 @@ BaseView {
                 choosedComponent: 'switch'
             }
             ViewRowItem{
+                id:languageItem
                 choosedComponent: 'comboBox'
+                componentDiscription: qsTr("Language")
+                comboBoxList: ['中文', 'English']
+            }
+            Connections{
+                target:languageItem
+                function onRowItemTriggered(result: int){
+                    console.log("language switched:",languageItem.comboBoxList[result])
+                }
             }
             ViewRowItem{
                 choosedComponent: 'default'
@@ -38,7 +47,7 @@ BaseView {
                 id:testRowItem
                 choosedComponent: 'comboBox'
                 comboBoxList: ['蓝牙', 'Wi-Fi', 'GPS']
-                defaultItemStatus: 0
+                itemStatus: 0
                 // onRowItemTriggered: {
                 //     console.log("comboBox triggered")
                 // }
