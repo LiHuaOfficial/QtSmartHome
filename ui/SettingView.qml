@@ -38,7 +38,7 @@ BaseView {
                 }
             }
             ViewRowItem{
-                choosedComponent: 'default'
+                choosedComponent: 'textArea'
             }
             ViewRowItem{
                 choosedComponent: 'switch'

@@ -19,7 +19,7 @@ Rectangle{
 
     //上层统一处理,Combox的选择,switch的开关
     signal rowItemTriggered(int result)
-
+    signal rowItemTriggeredStr(string result)
     Text{
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
@@ -44,6 +44,8 @@ Rectangle{
                     return switchComponent
                 case 'comboBox':
                     return comboBoxComponent
+                case 'textArea':
+                    return textAreaComponent
                 default:
                     return defaultComponent
             }
@@ -83,6 +85,46 @@ Rectangle{
         }
     }
 
+    Component{
+        id:textAreaComponent
+
+        Rectangle{
+            width:parent.width/5
+            height:parent.height*0.7
+            anchors.rightMargin: parent.width/10
+            TextField{
+                id:textField
+                anchors.right:parent.right
+                anchors.verticalCenter:parent.verticalCenter
+                anchors.rightMargin: parent.width/30
+            }
+            //确认输入的蓝色按钮
+            Rectangle{
+                anchors.left:textField.right
+                anchors.leftMargin:2
+                anchors.verticalCenter:parent.verticalCenter
+
+                radius:height/5
+                width:height
+                height:textField.height*1.5
+                color:ColorStyle.blue
+                Image{
+                    
+                    anchors.fill:parent
+                    source: "../assets/tick_icon.png"
+                }
+                MouseArea{
+                    id:ma
+                    anchors.fill:parent
+                    onClicked:{
+                        //触发rowItemTriggeredStr
+                        console.log("rowItemTriggeredStr")
+                    }
+                }
+            }
+        }
+
+    }
     Component {
         id: defaultComponent
         Text {
