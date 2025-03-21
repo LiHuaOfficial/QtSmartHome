@@ -38,7 +38,14 @@ BaseView {
                 }
             }
             ViewRowItem{
+                id:textAreaItem
                 choosedComponent: 'textArea'
+            }
+            Connections{
+                target:textAreaItem
+                function onRowItemTriggeredStr(res:string){
+                    console.log("textarea comfirmed:",res)
+                }
             }
             ViewRowItem{
                 choosedComponent: 'switch'

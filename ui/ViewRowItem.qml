@@ -28,7 +28,7 @@ Rectangle{
         text:rowItem.componentDiscription
 
         fontSizeMode: Text.Fit
-        font.pixelSize: 24
+        font.pixelSize: rowItem.height*0.5
     }
     
     Loader{
@@ -89,14 +89,20 @@ Rectangle{
         id:textAreaComponent
 
         Rectangle{
-            width:parent.width/5
+            width:parent.width/4
             height:parent.height*0.7
             anchors.rightMargin: parent.width/10
+
+            //color:'yellow'
             TextField{
                 id:textField
                 anchors.right:parent.right
                 anchors.verticalCenter:parent.verticalCenter
                 anchors.rightMargin: parent.width/30
+
+                width:parent.width*1.2
+                height:parent.height*0.7
+                font.pixelSize:height*0.8
             }
             //确认输入的蓝色按钮
             Rectangle{
@@ -106,7 +112,7 @@ Rectangle{
 
                 radius:height/5
                 width:height
-                height:textField.height*1.5
+                height:textField.height*1.3
                 color:ColorStyle.blue
                 Image{
                     
@@ -118,7 +124,8 @@ Rectangle{
                     anchors.fill:parent
                     onClicked:{
                         //触发rowItemTriggeredStr
-                        console.log("rowItemTriggeredStr")
+                        //console.log("rowItemTriggeredStr")
+                        rowItem.rowItemTriggeredStr(textField.text)
                     }
                 }
             }

@@ -78,46 +78,38 @@ BaseView {
                 }
             ]
 
-            property int itemHeight:column.height/6
+            readonly property int itemHeight:column.height/6
 
 
             ViewRowItem{
                 id:deviceTypeBox
-
                 height:column.itemHeight
 
                 choosedComponent: 'comboBox'
                 componentDiscription: qsTr("Device type")
                 comboBoxList: ['Socket', 'BLE','HTTP']
-
             }
             Connections{
                 target:deviceTypeBox
                 function onRowItemTriggered(index: int){
-                    console.log("devicebox change",index)
+                    console.log("devicetype box change",index)
                     addRect.deviceType=index
                 }
             }
-            Rectangle{
-                id:nameItem
-                width:parent.width
+            ViewRowItem{
+                id:deviceNameTextArea
                 height:column.itemHeight
-                Text{
-                    anchors.left:parent.left
-                    anchors.verticalCenter:parent.verticalCenter
-                    anchors.leftMargin: parent.width/30
 
-                    fontSizeMode: Text.Fit
-                    font.pixelSize: 20
-                    text:qsTr("Device Name")
+                choosedComponent:'textArea'
+                componentDiscription:qsTr("Device name")
+            }        
+            Connections{
+                target:deviceNameTextArea
+                function onRowItemTriggeredStr(res: string){
+                    console.log("device name get:",res)
+                    addRect.deviceName=res
                 }
-                TextField{
-                    anchors.right:parent.right
-                    anchors.verticalCenter:parent.verticalCenter
-                    anchors.rightMargin: parent.width/30
-                }
-            }            
-            
+            }
             //左边配置右边变量
             Row{
                 id:row
@@ -131,8 +123,7 @@ BaseView {
                     //根据设备显示不同item
                     Column{
                         id:bleItem
-                        width:parent.width
-                        height:parent.height
+                        anchors.fill:parent
 
                         Text{
                             text:"ble item"
@@ -140,23 +131,64 @@ BaseView {
                     }
                     Column{
                         id:socketItem
-
+                        anchors.fill:parent
                         Text{
                             text:"socket item"
+                        }
+                        ViewRowItem{
+                            id:socketIpTextArea
+                            height:column.itemHeight
+
+                            choosedComponent:'textArea'
+                            componentDiscription:qsTr("IP")
+                        }        
+                        Connections{
+                            target:socketIpTextArea
+                            function onRowItemTriggeredStr(res: string){
+                                console.log("socket ip get:",res)
+                            }
+                        }
+
+                        ViewRowItem{
+                            id:socketPortTextArea
+                            height:column.itemHeight
+
+                            choosedComponent:'textArea'
+                            componentDiscription:qsTr("Port")
+                        }        
+                        Connections{
+                            target:socketPortTextArea
+                            function onRowItemTriggeredStr(res: string){
+                                console.log("socket port get:",res)
+                            }
                         }
                     }
                     Column{
                         id:httpItem
-
+                        anchors.fill:parent
                         Text{
                             text:"http item"
                         }
+
+                        ViewRowItem{
+                            id:httpUrlTextArea
+                            height:column.itemHeight
+
+                            choosedComponent:'textArea'
+                            componentDiscription:qsTr("URL")
+                        }        
+                        Connections{
+                            target:httpUrlTextArea
+                            function onRowItemTriggeredStr(res: string){
+                                console.log("socket port get:",res)
+                            }
+                        }
                     }
                 }
-                Item{//右半
+                Rectangle{//右半
                     width:parent.width/3
                     height:row.height
-                    //color:"black"
+                    color:"black"
                 }
             }
         }
