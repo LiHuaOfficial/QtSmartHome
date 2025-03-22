@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 //pragma ComponentBehavior: Bound
 
 import QtQuick
@@ -21,6 +22,7 @@ BaseView {
         }
     }
 
+    //用于debug
     Button{
         z:2
         anchors.right:parent.right
@@ -47,6 +49,14 @@ BaseView {
 
         model:ListModel{
             id:modelApp
+
+
+            ListElement{
+                deviceid:12
+                active:true
+                name:"Helloo"
+                deviceType:QtSmartHomeGlobal.Socket
+            }
             ListElement {
                 deviceid:11
                 active:true
@@ -65,6 +75,12 @@ BaseView {
             }
         }
         delegate: DeviceApp{
+            //提供一些可靠性，当类型错误时会有报错信息
+            required property int deviceid
+            required property bool active
+            required property string name
+            required property int deviceType
+
             deviceId:deviceid
             info:name
             isActivate:active

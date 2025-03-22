@@ -115,9 +115,9 @@ BaseView {
                 id:row
                 width:parent.width
                 height:column.height-deviceTypeBox.height
-
+                spacing:10
                 Item{//左半
-                    width:parent.width/3*2
+                    width:parent.width/2
                     height:row.height
 
                     //根据设备显示不同item
@@ -185,10 +185,86 @@ BaseView {
                         }
                     }
                 }
-                Rectangle{//右半
-                    width:parent.width/3
+                Item{//右半
+                    id:varRect
+                    width:parent.width/2
                     height:row.height
-                    color:"black"
+                    //color:"yellow"
+                    readonly property var dataTypeList:[qsTr('Command'),qsTr('Data'),qsTr('ChartData')]
+                    Column{
+                        id:varInfoColumn
+                        width:parent.width
+                        height:varText.height+addVarItem.height
+
+
+                        Text{
+                            id:varText
+                            text:qsTr("Variables")
+                        }
+
+                        Row{
+                            id:addVarItem
+                            width:parent.width
+                            height:varRect.height/10
+                            ComboBox{
+                                id:addvarCombobox
+                                width:parent.width/10*3.5
+                                height:parent.height
+                                model:varRect.dataTypeList
+                            }
+                            TextField{
+                                id:addvarTextArea
+                                width:parent.width/10*5
+                                height:parent.height
+                            }
+                            Rectangle{
+                                height:parent.height
+                                width:height
+                                //color:ColorStyle.blue
+
+                                Image{
+                                    anchors.fill:parent
+                                    source:'../assets/add_icon.png'
+                                }
+                                MouseArea{
+                                    anchors.fill:parent
+                                    onClicked:{
+                                        console.log('add new var')
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+                    ListView{
+                        id:variablesListView
+
+                        anchors.top:varInfoColumn.bottom
+
+                        width:parent.width
+                        height:parent.height-varInfoColumn.height
+
+                        model:ListModel{
+                            id:variablesList
+                            ListElement{
+                                variableType:1
+                                variableName:'hello'
+                            }
+                            ListElement{
+                                variableType:2
+                                variableName:'hfvcavava'                                
+                            }
+                        }
+
+                        delegate:Rectangle{
+                            required property int variableType
+                            required property string variableName
+
+                            //显示变量和删除框
+                        }
+                    }
+
                 }
             }
         }
