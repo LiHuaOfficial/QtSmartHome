@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 
@@ -43,6 +44,7 @@ BaseView {
             //topPadding:10
             spacing: 10
 
+            clip:true
             states: [
                 State {
                     name: "BLE"
@@ -114,7 +116,7 @@ BaseView {
             Row{
                 id:row
                 width:parent.width
-                height:column.height-deviceTypeBox.height
+                height:column.height-deviceTypeBox.height-deviceNameTextArea.height-20//spacing: 10
                 spacing:10
                 Item{//左半
                     width:parent.width/2
@@ -191,6 +193,7 @@ BaseView {
                     height:row.height
                     //color:"yellow"
                     readonly property var dataTypeList:[qsTr('Command'),qsTr('Data'),qsTr('ChartData')]
+
                     Column{
                         id:varInfoColumn
                         width:parent.width
@@ -205,7 +208,7 @@ BaseView {
                         Row{
                             id:addVarItem
                             width:parent.width
-                            height:varRect.height/10
+                            height:varRect.height/6
                             ComboBox{
                                 id:addvarCombobox
                                 width:parent.width/10*3.5
@@ -230,12 +233,37 @@ BaseView {
                                     anchors.fill:parent
                                     onClicked:{
                                         console.log('add new var')
+                                        variablesList.append({variableType:addvarCombobox.currentIndex,
+                                                              variableName:addvarTextArea.text})
                                     }
                                 }
                             }
                         }
+                    }
+                    Rectangle{//删除所有var的按钮
+                        color:ColorStyle.pinkyRed
 
+                        width:parent.width/7
+                        height:width
 
+                        radius:width/10
+                        z:2
+
+                        anchors.right:parent.right
+                        anchors.rightMargin:width/4
+                        anchors.top:varInfoColumn.bottom
+                        //anchors.rightMargin:height/2
+                        //anchors.verticalCenter:parent.verticalCenter
+                        Image{
+                            anchors.fill:parent
+                            source:'../assets/delete_icon.png'
+                        }
+                        MouseArea{
+                            anchors.fill:parent
+                            onClicked:{
+                                variablesList.clear()
+                            }
+                        }
                     }
                     ListView{
                         id:variablesListView
@@ -244,6 +272,8 @@ BaseView {
 
                         width:parent.width
                         height:parent.height-varInfoColumn.height
+                        
+                        clip:true//防止
 
                         model:ListModel{
                             id:variablesList
@@ -258,10 +288,21 @@ BaseView {
                         }
 
                         delegate:Rectangle{
+                            id:singleVar
                             required property int variableType
                             required property string variableName
 
+                            width:varRect.width
+                            height:varRect.height/4
+                            //color:'yellow'
                             //显示变量和删除框
+                            Text{
+                                id:variableText
+
+                                anchors.verticalCenter:parent.verticalCenter
+
+                                text:varRect.dataTypeList[parent.variableType]+':'+parent.variableName
+                            }
                         }
                     }
 

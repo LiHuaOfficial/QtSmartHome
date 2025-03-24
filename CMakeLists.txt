@@ -45,6 +45,7 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES ui/TopBar.qml
         RESOURCES assets/house_icon.png assets/bluetooth_icon.png assets/wifi_icon.png assets/http_icon.png
         RESOURCES assets/app_icon_ai.png assets/app_icon_ai.ico assets/tick_icon.png assets/add_icon.png
+        RESOURCES assets/delete_icon.png
         SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h
         QML_FILES ui/DeviceApp.qml
         SOURCES inc/DeviceManager.h
