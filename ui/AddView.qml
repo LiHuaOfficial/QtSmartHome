@@ -11,6 +11,39 @@ BaseView {
     // }
     id:addView
 
+    //添加按钮
+    Rectangle{
+        id:addDeviceBtn
+
+        z:3
+
+        width:parent.width/10
+        height:width
+        
+        radius:width/2
+
+        readonly property int addDeviceBtnMarginWidth: 5
+        anchors.right:parent.right
+        anchors.bottom:parent.bottom
+        anchors.rightMargin:addDeviceBtnMarginWidth
+        anchors.bottomMargin:addDeviceBtnMarginWidth
+        color:ColorStyle.blue
+
+        Image{
+            width:parent.width*0.8
+            height:width
+            anchors.centerIn:parent
+
+            source:'../assets/plus_icon.png'
+        }
+        MouseArea{
+            anchors.fill:parent
+            onClicked:{
+                //调用后端方法
+            }
+        }
+    }
+    //表单框
     Rectangle{
         readonly property int seperatorHeight:1
 
@@ -194,7 +227,7 @@ BaseView {
                     //color:"yellow"
                     readonly property var dataTypeList:[qsTr('Command'),qsTr('Data'),qsTr('ChartData')]
 
-                    Column{
+                    Column{//标题和添加变量框
                         id:varInfoColumn
                         width:parent.width
                         height:varText.height+addVarItem.height
@@ -299,9 +332,10 @@ BaseView {
                             Text{
                                 id:variableText
 
+                                font.pixelSize:singleVar.height*0.4
                                 anchors.verticalCenter:parent.verticalCenter
 
-                                text:varRect.dataTypeList[parent.variableType]+':'+parent.variableName
+                                text:'%1:%2'.arg(varRect.dataTypeList[parent.variableType]).arg(parent.variableName)//指定宽度
                             }
                         }
                     }
