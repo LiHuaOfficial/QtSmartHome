@@ -16,7 +16,7 @@ Rectangle {
 
     MouseArea{
         anchors.fill: parent
-        onClicked:buttonClicked()
+        onClicked:parent.buttonClicked()
     }
 
     onButtonClicked: console.log("sideBar button clicked")

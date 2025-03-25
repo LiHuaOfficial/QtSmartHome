@@ -15,6 +15,15 @@ Window {
     title:"SmartHome"
 
     property int selectedView: 0
+    
+    Notification {
+        id: notification
+        z: 100
+        width: parent.width<720?parent.width/2:360
+        contentHeight: 50
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
 
     TopBar{
         id:topBar
@@ -24,7 +33,10 @@ Window {
         width:window.width
         height:window.height/8
 
-        onSideBarButtonClicked:sideBar.foldStatus=!sideBar.foldStatus
+        onSideBarButtonClicked:{
+            sideBar.foldStatus=!sideBar.foldStatus
+            notification.notify("message",Notification.Message,1000)
+        }
     }
     SideBar{
         id:sideBar
