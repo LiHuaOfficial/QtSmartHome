@@ -11,7 +11,18 @@ BaseView {
     // }
     id:addView
 
-    //添加按钮
+    //设备信息为变量，点击add按钮，校验，成功后写入到本地
+    property int deviceType:0
+    property string deviceName:''
+
+    property list<string> config//配置信息,顺序是固定的
+    /*
+    socket:ip,port
+    ble:
+    http:url
+    */
+
+    //添加设备的按钮
     Rectangle{
         id:addDeviceBtn
 
@@ -39,7 +50,12 @@ BaseView {
         MouseArea{
             anchors.fill:parent
             onClicked:{
-                //调用后端方法
+                //检查信息,调用后端方法
+                if(addView.deviceName.length===0){
+                    addView.notificationTrigged(qsTr("Device name can't be empty"),Notification.Error,1000)
+                    return
+                }
+                //长度根据状态的script确定，可以用索引直接访问
             }
         }
     }
@@ -63,9 +79,7 @@ BaseView {
 
         color:"white"
 
-        //设备信息为变量，点击add按钮，校验，成功后写入到本地
-        property int deviceType:0
-        property string deviceName
+
         //添加设备的表单
         //需要的值有设备类型，设备名称，链接需要的信息，关注的变量
         //不同的设备类型需要的信息不同，还得切换显示
@@ -81,24 +95,39 @@ BaseView {
             states: [
                 State {
                     name: "BLE"
-                    when: addRect.deviceType == QtSmartHomeGlobal.BLE
+                    when: addView.deviceType == QtSmartHomeGlobal.BLE
                     PropertyChanges { target: bleItem; visible: true; opacity: 1 }
                     PropertyChanges { target: socketItem; visible: false; opacity: 0 }
                     PropertyChanges { target: httpItem; visible: false; opacity: 0 }
+                    StateChangeScript{
+                        script:{
+                            addView.config=['','']//起一个清空的作用
+                        }
+                    }
                 },
                 State {
                     name: "Socket"
-                    when: addRect.deviceType == QtSmartHomeGlobal.Socket
+                    when: addView.deviceType == QtSmartHomeGlobal.Socket
                     PropertyChanges { target: bleItem; visible: false; opacity: 0 }
                     PropertyChanges { target: socketItem; visible: true; opacity: 1 }
                     PropertyChanges { target: httpItem; visible: false; opacity: 0 }
+                    StateChangeScript{
+                        script:{
+                            addView.config=['','']
+                        }
+                    }
                 },
                 State {
                     name: "HTTP"
-                    when: addRect.deviceType == QtSmartHomeGlobal.HTTP
+                    when: addView.deviceType == QtSmartHomeGlobal.HTTP
                     PropertyChanges { target: bleItem; visible: false; opacity: 0 }
                     PropertyChanges { target: socketItem; visible: false; opacity: 0 }
                     PropertyChanges { target: httpItem; visible: true; opacity: 1 }
+                    StateChangeScript{
+                        script:{
+                            addView.config=['','']
+                        }
+                    }
                 }
             ]
 
@@ -128,7 +157,7 @@ BaseView {
                 target:deviceTypeBox
                 function onRowItemTriggered(index: int){
                     console.log("devicetype box change",index)
-                    addRect.deviceType=index
+                    addView.deviceType=index
                 }
             }
             ViewRowItem{
@@ -141,8 +170,12 @@ BaseView {
             Connections{
                 target:deviceNameTextArea
                 function onRowItemTriggeredStr(res: string){
-                    console.log("device name get:",res)
-                    addRect.deviceName=res
+                    if(res.length===0){
+                        addView.notificationTrigged(qsTr("Device name empty"),Notification.Warning,1000)
+                        return
+                    }
+                    addView.notificationTrigged(qsTr("Device name get"),Notification.Success,1000)
+                    addView.deviceName=res
                 }
             }
             //左边配置右边变量
@@ -180,7 +213,13 @@ BaseView {
                         Connections{
                             target:socketIpTextArea
                             function onRowItemTriggeredStr(res: string){
-                                console.log("socket ip get:",res)
+                                //console.log("socket ip get:",res)
+                                if(res.length===0){
+                                    addView.notificationTrigged(qsTr("IP empty"),Notification.Warning,1000)
+                                    return
+                                }
+                                addView.notificationTrigged(qsTr("Socket IP get"),Notification.Success,1000)
+                                addView.config[0]=res
                             }
                         }
 
@@ -194,8 +233,14 @@ BaseView {
                         Connections{
                             target:socketPortTextArea
                             function onRowItemTriggeredStr(res: string){
-                                console.log("socket port get:",res)
-                            }
+                                //console.log("socket port get:",res)
+                                if(res.length===0){
+                                    addView.notificationTrigged(qsTr("Port empty"),Notification.Warning,1000)
+                                    return
+                                }
+                                addView.notificationTrigged(qsTr("Socket port get"),Notification.Success,1000)
+                                addView.config[1]=res
+                            }   
                         }
                     }
                     Column{
@@ -215,7 +260,13 @@ BaseView {
                         Connections{
                             target:httpUrlTextArea
                             function onRowItemTriggeredStr(res: string){
-                                console.log("socket port get:",res)
+                                console.log("http url get:",res)
+                                if(res.length===0){
+                                    addView.notificationTrigged(qsTr("URL empty"),Notification.Warning,1000)
+                                    return
+                                }
+                                addView.notificationTrigged(qsTr("HTTP URL get"),Notification.Success,1000)
+                                addView.config[0]=res
                             }
                         }
                     }
@@ -265,7 +316,11 @@ BaseView {
                                 MouseArea{
                                     anchors.fill:parent
                                     onClicked:{
-                                        console.log('add new var')
+                                        if(addvarTextArea.text.length===0){
+                                            addView.notificationTrigged(qsTr("Variable name empty"),Notification.Warning,1000)
+                                            return
+                                        }
+                                        addView.notificationTrigged(qsTr("Variable added"),Notification.Success,1000)
                                         variablesList.append({variableType:addvarCombobox.currentIndex,
                                                               variableName:addvarTextArea.text})
                                     }
@@ -294,6 +349,7 @@ BaseView {
                         MouseArea{
                             anchors.fill:parent
                             onClicked:{
+                                addView.notificationTrigged(qsTr("All variables deleted"),Notification.Warning,1000)
                                 variablesList.clear()
                             }
                         }

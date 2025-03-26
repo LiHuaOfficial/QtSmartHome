@@ -39,7 +39,7 @@ Item {
 
     Rectangle{
         //anchors.verticalCenter: parent
-        anchors.leftMargin: parent
+        //anchors.leftMargin: parent
         color: ColorStyle.blue
 
         width: parent.width/20

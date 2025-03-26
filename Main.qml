@@ -20,7 +20,7 @@ Window {
     Notification {
         id: notification
         z: 100
-        width: parent.width<720?parent.width/2:360
+        width: parent.width/3*2
         contentHeight: 50
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
@@ -79,17 +79,35 @@ Window {
             anchors.fill:parent
             selectedView:window.selectedView
         }
+        Connections{//target只能指定一个对象...
+            target:mainView
+            function onNotificationTrigged(message: string,type: int,timeout: int){
+                notification.notify(message,type,timeout)
+            }
+        }
         AddView{
             id:addView
             index:1
             anchors.fill:parent
             selectedView:window.selectedView
         }
+        Connections{
+            target:addView
+            function onNotificationTrigged(message: string,type: int,timeout: int){
+                notification.notify(message,type,timeout)
+            }
+        }
         SettingView{
             id:settingView
             index:2
             anchors.fill:parent
             selectedView:window.selectedView
+        }
+        Connections{
+            target:settingView
+            function onNotificationTrigged(message: string,type: int,timeout: int){
+                notification.notify(message,type,timeout)
+            }
         }
     }
 
