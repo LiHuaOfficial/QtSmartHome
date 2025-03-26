@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../common"
 BaseView {
     id: settingView
     // Text{
@@ -23,7 +24,19 @@ BaseView {
             
             spacing: 10
             ViewRowItem{
+                id:fullScreenItem
                 choosedComponent: 'switch'
+                componentDiscription: qsTr("Fullscreen")
+            }
+            Connections{
+                target:fullScreenItem
+                function onRowItemTriggered(result: int){
+                    if(result==1){
+                        Common.isFullScreen=true                       
+                    }else{
+                        Common.isFullScreen=false
+                    }
+                }
             }
             ViewRowItem{
                 id:languageItem

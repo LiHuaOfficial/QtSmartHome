@@ -22,7 +22,7 @@ qt_add_executable(appQtSmartHome
 target_include_directories(appQtSmartHome PRIVATE inc common)
 
 # when using pragma Singleton
-set_source_files_properties(common/ColorStyle.qml
+set_source_files_properties(common/ColorStyle.qml common/Common.qml
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(appQtSmartHome
@@ -35,6 +35,7 @@ qt_add_qml_module(appQtSmartHome
         RESOURCES assets/geer_icon.png
         QML_FILES ui/SideBarContent.qml
         QML_FILES common/ColorStyle.qml
+        QML_FILES common/Common.qml
         QML_FILES ui/ViewRowItem.qml
         QML_FILES ui/BaseView.qml
         QML_FILES ui/AddView.qml

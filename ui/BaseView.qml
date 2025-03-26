@@ -8,6 +8,8 @@ Item {
     property int selectedView: -1
     property int index: -1
 
+    signal notificationTrigged(string msg,int type,int timeout)
+
     visible:opacity>0.01
 
     Behavior on opacity {

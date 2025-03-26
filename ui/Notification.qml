@@ -13,7 +13,7 @@ Item {
     required property int contentHeight
     readonly property real textParentRatio:0.5
     
-    function notify(message, type = Notification.None, timeout = 3000) {
+    function notify(message, type = Notification.Message, timeout = 1000) {
         listModel.append({
                              message: message,
                              type: type,
@@ -124,11 +124,26 @@ Item {
                     Text {
                         id: __message
 
+                        property string typeString: {
+                            switch (notificationContent.type) {
+                            case Notification.Success:
+                                return qsTr("Success");
+                            case Notification.Warning:
+                                return qsTr("Warning");
+                            case Notification.Message:
+                                return qsTr("Info");
+                            case Notification.Error:
+                                return qsTr("Error");
+                            default:
+                                return "";
+                            }
+                        }
+
                         anchors.verticalCenter: parent.verticalCenter
 
                         font.pixelSize:parent.height*root.textParentRatio*0.6
 
-                        text: notificationContent.message
+                        text: typeString+':'+notificationContent.message
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WrapAnywhere
 

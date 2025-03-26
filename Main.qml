@@ -16,6 +16,7 @@ Window {
 
     property int selectedView: 0
     
+
     Notification {
         id: notification
         z: 100
@@ -23,6 +24,22 @@ Window {
         contentHeight: 50
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    //主界面信号处理
+    Connections{
+        target:Common
+        function onIsFullScreenChanged(){
+            if(Common.isFullScreen){
+                console.log("fullscreen on")
+                window.visibility=Window.FullScreen
+                notification.notify(qsTr("Fullscreen On"),Notification.Success)
+            }else{
+                console.log("fullscreen off")
+                window.visibility=Window.Windowed
+                notification.notify(qsTr("Fullscreen Off"),Notification.Success)
+            }
+        }
     }
 
     TopBar{
@@ -35,7 +52,7 @@ Window {
 
         onSideBarButtonClicked:{
             sideBar.foldStatus=!sideBar.foldStatus
-            notification.notify("message",Notification.Message,1000)
+            //notification.notify("message",Notification.Message,1000)
         }
     }
     SideBar{

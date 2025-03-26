@@ -99,7 +99,7 @@ bool DeviceManager::freeID(int id){
 
 //将信息固化到本地
 int DeviceManager::addDevice(DeviceInfo info){
-
+    return 0;
 }
 
 int DeviceManager::orderlyGetID(){
