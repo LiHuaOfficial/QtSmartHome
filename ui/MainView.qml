@@ -101,7 +101,8 @@ BaseView {
         let id=0
         while ((id=DeviceManager.orderlyGetID())!=-1) {
             let infoMap=DeviceManager.getDeviceInfo(id)
-            //console.log(infoMap)
+            //console.log(infoMap["command"])里面是QVariantList
+
             modelApp.append({
                              deviceid:id,//DeviceManger可以获取id对应信息
                              name:infoMap["name"],

@@ -1,9 +1,9 @@
 #include "inc/DeviceInfo.h"
 
-int DeviceInfoCheckSocket::checkInfo(QVector<QString>& cfgInfo){
+int DeviceInfoCheckSocket::checkInfo(QVariantList& cfgInfo){
     //校验ip
     QRegularExpression re("(^(?:\\d{1,3}\\.){3}\\d{1,3}$)");
-    if(!re.match(cfgInfo[0]).hasMatch()){
+    if(!re.match(cfgInfo[0].toString()).hasMatch()){
         return 1;//ip不合法
     }
     //校验端口

@@ -49,14 +49,13 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
                 
                 ConvertJsonArrayToQVector(cfgInfo,vecCfgInfo);
 
-                QVector<QVector<QString>> vec={vecVarCmd,vecVarData,vecVarDataOnChart};
                 DeviceInfo info(deviceObj.value("name").toString(),
                                 static_cast<DeviceInfo::DeviceType>(deviceObj.value("type").toInt()),
-                                vecCfgInfo,
+                                cfgInfo.toVariantList(),
                                 variables.toVariantMap(),
                                 deviceObj.value("variableOnApp").toString());
 
-                int infoCode=info.isBadInfo();
+                int infoCode=info.getInfoCode();
                 if(!infoCode) {
                     idInfoMap.insert(getID(),info);
                     qDebug()<<"info added";
@@ -97,8 +96,23 @@ bool DeviceManager::freeID(int id){
     return freeIdSet.insert(id).second;
 }
 
-//将信息固化到本地
+//将信息固化到本地x
 int DeviceManager::addDevice(DeviceInfo info){
+    return 0;
+}
+
+//仅修改类内数据，程序结束时在写回json（感觉这个方案可行性高些）
+int DeviceManager::addDevice(QString name,int type,QVariantMap variablesMap,QList<QString> config,QString displayedData){
+    qDebug()<<"name"<<name<<"type"<<type;
+
+    qDebug()<<"config msg";
+    for (QString str : config) {
+        qDebug()<<str;
+    }
+    qDebug()<<"variablesMap msg";
+    for (QString key : variablesMap.keys()) {
+        qDebug()<<key<<":"<<variablesMap[key];
+    }
     return 0;
 }
 

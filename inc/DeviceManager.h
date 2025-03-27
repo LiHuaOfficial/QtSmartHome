@@ -4,11 +4,14 @@
 #include <QtQml>
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
+#include <qlist.h>
+#include <qobject.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
 #include <set>
 #include <QMap>
 
+#include "QtSmartHomeGlobal.h"
 #include "inc/DeviceInfo.h"
 
 class DeviceManager:public QObject{
@@ -16,6 +19,8 @@ class DeviceManager:public QObject{
     QML_ELEMENT
     QML_SINGLETON
 public:
+    using DeviceType=QtSmartHomeGlobal::DeviceType;
+
     const int MAX_ID_NUM=20;
 
     //生成或读取根目录下的config.JSON
@@ -31,7 +36,8 @@ public:
 
     Q_INVOKABLE QString test(){return testStr;};
     Q_INVOKABLE int addDevice(DeviceInfo info);
-
+    //qml 能调用的函数不支持自定义类型
+    Q_INVOKABLE int addDevice(QString name,int type,QVariantMap variablesMap,QList<QString> config,QString displayedData="None");
     //(会不会有被并发访问的问题)从第一个值开始，每调用一次返回一个ID，直到返回-1
     Q_INVOKABLE int orderlyGetID();
 

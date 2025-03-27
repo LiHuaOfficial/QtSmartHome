@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 #include <qcontainerfwd.h>
+#include <qvariant.h>
 
 #include "common/QtSmartHomeGlobal.h"
 
@@ -15,16 +16,16 @@ class DeviceInfoCheck{
 public:
     virtual ~DeviceInfoCheck(){};
     //校验值的合法性返回不合法值的位置，0表示合法
-    virtual int checkInfo(QVector<QString>& cfgInfo)=0;
+    virtual int checkInfo(QVariantList& cfgInfo)=0;
 };
 
 class DeviceInfoCheckSocket:public DeviceInfoCheck{
 public:
     ~DeviceInfoCheckSocket()override {};
 
-    const QVector<QString> socketInfo={"ip","port"};
+    const QVariantList socketInfo={"ip","port"};
     //校验值的合法性返回不合法值的位置，0表示合法，1表示ip不合法，.......
-    int checkInfo(QVector<QString>& cfgInfo) override;
+    int checkInfo(QVariantList& cfgInfo) override;
 };
 
 class DeviceInfo{
@@ -33,7 +34,7 @@ public:
     using DeviceType=QtSmartHomeGlobal::DeviceType;
     
     DeviceInfo(){};
-    DeviceInfo(QString dvName,DeviceType dvType,QVector<QString> cfgInfoValue,
+    DeviceInfo(QString dvName,DeviceType dvType,QVariantList cfgInfoValue,
         QVariantMap vars,QString varOnApp):deviceName(dvName),deviceType(dvType),
                 configInfoValue(cfgInfoValue),variablesMap(vars),variableOnApp(varOnApp){
         switch (dvType) {
@@ -57,7 +58,7 @@ public:
     DeviceType& getDeviceType(){return deviceType;};
 
     //vaild Info returns false
-    int isBadInfo(){return badInfo;};
+    int getInfoCode(){return badInfo;};
 
     ~DeviceInfo(){
         delete check;
@@ -68,7 +69,7 @@ public:
 
     QString deviceName;
     DeviceType deviceType;
-    QVector<QString> configInfoValue;
+    QVariantList configInfoValue;
     //QVector<QVector<QString>> variables;
     QVariantMap variablesMap;
     QString variableOnApp;

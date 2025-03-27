@@ -50,12 +50,39 @@ BaseView {
         MouseArea{
             anchors.fill:parent
             onClicked:{
-                //检查信息,调用后端方法
+                //检查信息非空,调用后端方法
                 if(addView.deviceName.length===0){
                     addView.notificationTrigged(qsTr("Device name can't be empty"),Notification.Error,1000)
                     return
                 }
                 //长度根据状态的script确定，可以用索引直接访问
+                for(var i=0;i<addView.config.length;i++){
+                    if(addView.config[i].length===0){
+                        addView.notificationTrigged(qsTr("Config can't be empty"),Notification.Error,1000)
+                        return
+                    }
+                }
+                if(variablesList.count===0){
+                    addView.notificationTrigged(qsTr("Variables can't be empty"),Notification.Error,1000)
+                    return
+                }
+                //考虑要不要加个map防止名字重复?
+
+                //把variables构造成map
+                var variablesMap={
+                    'Command':[],
+                    'Data':[],
+                    'ChartData':[]
+                }
+                for(var i=0;i<variablesList.count;i++){
+                    //console.log(variablesList.get(i).variableName)
+                    variablesMap[varRect.dataTypeList[variablesList.get(i).variableType]].push(variablesList.get(i).variableName)
+                }
+                
+                console.log(variablesMap['Command'])
+                console.log(variablesMap['Data'])
+                console.log(variablesMap['ChartData'])
+                addView.notificationTrigged(qsTr("Device added"),Notification.Success,1000)
             }
         }
     }
@@ -125,7 +152,7 @@ BaseView {
                     PropertyChanges { target: httpItem; visible: true; opacity: 1 }
                     StateChangeScript{
                         script:{
-                            addView.config=['','']
+                            addView.config=['']
                         }
                     }
                 }
@@ -276,7 +303,7 @@ BaseView {
                     width:parent.width/2
                     height:row.height
                     //color:"yellow"
-                    readonly property var dataTypeList:[qsTr('Command'),qsTr('Data'),qsTr('ChartData')]
+                    readonly property var dataTypeList:['Command','Data','ChartData']
 
                     Column{//标题和添加变量框
                         id:varInfoColumn
