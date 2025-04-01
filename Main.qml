@@ -42,6 +42,14 @@ Window {
         }
     }
 
+    //device manager信号处理
+        Connections{
+        target:DeviceManager
+        function onDeviceManagerError(msg:string){
+            notification.notify(msg,Notification.Error,3000)
+        } 
+    }
+
     TopBar{
         id:topBar
 

@@ -102,7 +102,7 @@ BaseView {
         while ((id=DeviceManager.orderlyGetID())!=-1) {
             let infoMap=DeviceManager.getDeviceInfo(id)
             //console.log(infoMap["command"])里面是QVariantList
-
+            
             modelApp.append({
                              deviceid:id,//DeviceManger可以获取id对应信息
                              name:infoMap["name"],
@@ -111,12 +111,15 @@ BaseView {
         }
 
     }
-    //设备有唯一id
-    //添加设备获得id
-    //id可以访问到设备信息
-
-    //此处要求id可以获取到element并更新信息
-    function addDevice(){
-
+    Connections{
+        target:DeviceManager
+        function onDeviceAdded(id){
+            console.log("main view onDeviceAdded")
+            let infoMap=DeviceManager.getDeviceInfo(id)
+            modelApp.append({deviceid:id,
+                             name:infoMap["name"],
+                             deviceType:infoMap["type"]})
+        }
     }
+
 }

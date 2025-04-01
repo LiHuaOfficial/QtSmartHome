@@ -15,7 +15,7 @@ BaseView {
     property int deviceType:0
     property string deviceName:''
 
-    property list<string> config//配置信息,顺序是固定的
+    property var config//配置信息,顺序是固定的
     /*
     socket:ip,port
     ble:
@@ -83,6 +83,8 @@ BaseView {
                 console.log(variablesMap['Data'])
                 console.log(variablesMap['ChartData'])
                 addView.notificationTrigged(qsTr("Device added"),Notification.Success,1000)
+
+                DeviceManager.addDevice(addView.deviceName,addView.deviceType,variablesMap,addView.config)
             }
         }
     }

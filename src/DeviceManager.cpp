@@ -6,6 +6,8 @@
 #include <qjsonarray.h>
 #include <qjsonobject.h>
 #include <qlogging.h>
+#include <qtmetamacros.h>
+#include <qvariant.h>
 
 void ConvertJsonArrayToQVector(QJsonArray &jsonArray, QVector<QString> &vector) {
     for (int i = 0; i < jsonArray.size(); i++) {
@@ -80,6 +82,10 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
     
 }
 
+DeviceManager::~DeviceManager(){
+   //写回JSON文件 
+}
+//id满时返回-1
 int DeviceManager::getID(){
     if(!freeIdSet.empty()){
         int res=*freeIdSet.begin();
@@ -102,18 +108,35 @@ int DeviceManager::addDevice(DeviceInfo info){
 }
 
 //仅修改类内数据，程序结束时在写回json（感觉这个方案可行性高些）
-int DeviceManager::addDevice(QString name,int type,QVariantMap variablesMap,QList<QString> config,QString displayedData){
-    qDebug()<<"name"<<name<<"type"<<type;
+void DeviceManager::addDevice(QString name,int type,QVariantMap variablesMap,QVariantList config,QString displayedData){
+    // qDebug()<<"name"<<name<<"type"<<type;
 
-    qDebug()<<"config msg";
-    for (QString str : config) {
-        qDebug()<<str;
+    // qDebug()<<"config msg";
+    // for (QVariant str : config) {
+    //     qDebug()<<str.toString();
+    // }
+    // qDebug()<<"variablesMap msg";
+    // for (QString key : variablesMap.keys()) {
+    //     qDebug()<<key<<":"<<variablesMap[key];
+    // }
+
+    //先检查id
+    int id=getID();
+    if (id==-1) {
+        qDebug()<<"id full";
+        emit deviceManagerError("id full");
+        return;
     }
-    qDebug()<<"variablesMap msg";
-    for (QString key : variablesMap.keys()) {
-        qDebug()<<key<<":"<<variablesMap[key];
+    auto info=DeviceInfo(name,static_cast<DeviceInfo::DeviceType>(type),config,variablesMap,displayedData);
+    int infoCode=info.getInfoCode();
+    if(infoCode){
+        qDebug()<<"Error:infocode "<<infoCode;
+        emit deviceManagerError(QString("invaild info code:%1").arg(infoCode));
+        return;
     }
-    return 0;
+    idInfoMap.insert(id,info);
+    emit deviceAdded(id);
+    return;
 }
 
 int DeviceManager::orderlyGetID(){

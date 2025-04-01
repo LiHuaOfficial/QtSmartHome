@@ -25,7 +25,8 @@ public:
 
     //生成或读取根目录下的config.JSON
     explicit DeviceManager();
-
+    ~DeviceManager();
+    
     //在QML前初始化
     static DeviceManager* create(QQmlEngine* engine, QJSEngine* scriptEngine) {
         Q_UNUSED(engine)
@@ -37,7 +38,7 @@ public:
     Q_INVOKABLE QString test(){return testStr;};
     Q_INVOKABLE int addDevice(DeviceInfo info);
     //qml 能调用的函数不支持自定义类型
-    Q_INVOKABLE int addDevice(QString name,int type,QVariantMap variablesMap,QList<QString> config,QString displayedData="None");
+    Q_INVOKABLE void addDevice(QString name,int type,QVariantMap variablesMap,QVariantList config,QString displayedData="None");
     //(会不会有被并发访问的问题)从第一个值开始，每调用一次返回一个ID，直到返回-1
     Q_INVOKABLE int orderlyGetID();
 
@@ -51,7 +52,8 @@ public:
     };
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
-    void error_json(int idx);
+    void deviceAdded(int id);
+    void deviceManagerError(QString errorMsg);
 private:
     using IDSet=std::set<int>;
     using IDInfoMap=QMap<int,DeviceInfo>;
