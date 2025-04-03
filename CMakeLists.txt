@@ -1,10 +1,25 @@
+set(CMAKE_TOOLCHAIN_FILE "D:/Application/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
+set(VCPKG_TARGET_TRIPLET "x64-mingw-static")
+
+# set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# # 添加编译器选项
+# add_compile_options("/permissive-")
+# add_compile_options("/Zc:__cplusplus")
+
 cmake_minimum_required(VERSION 3.16)
 
 project(QtSmartHome VERSION 0.1 LANGUAGES CXX)
 
+
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)#generate .qmlls.ini needed by language server,helping complete qml module create by cpp
+
+
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
@@ -15,6 +30,9 @@ qt_policy(SET QTP0004 NEW)
 qt_add_executable(appQtSmartHome
     main.cpp
 )
+
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+target_link_libraries(appQtSmartHome PRIVATE unofficial::sqlite3::sqlite3)
 
 #help finding headers(qml module create by cpp)
 target_include_directories(appQtSmartHome PRIVATE inc common)
