@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-
+    
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/assets/app_icon_ai.ico"));
 

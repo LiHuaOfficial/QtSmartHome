@@ -6,6 +6,7 @@
 #include <QtQml/qqmlregistration.h>
 #include <qcontainerfwd.h>
 #include <qvariant.h>
+#include <memory>
 
 #include "common/QtSmartHomeGlobal.h"
 
@@ -57,6 +58,8 @@ public:
     //return reference
     DeviceType& getDeviceType(){return deviceType;};
 
+    std::shared_ptr<QJsonObject> getDeviceInfo();
+    
     //vaild Info returns false
     int getInfoCode(){return badInfo;};
 

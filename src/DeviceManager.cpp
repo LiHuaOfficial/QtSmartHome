@@ -84,6 +84,21 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
 
 DeviceManager::~DeviceManager(){
    //写回JSON文件 
+   QJsonArray devicesArray;
+   for(auto it=idInfoMap.begin();it!=idInfoMap.end();it++){
+        auto deviceInfo=it.value().getDeviceInfo();
+        devicesArray.append(*deviceInfo);
+   }
+   QJsonObject rootObj;
+   rootObj.insert("devices",devicesArray);
+   QJsonDocument doc(rootObj);
+
+   if(configFile.open(QIODevice::WriteOnly)){
+        configFile.write(doc.toJson(QJsonDocument::Indented));
+        configFile.close();
+   }else{
+        qDebug()<<"config file open failed when exit app";
+   }
 }
 //id满时返回-1
 int DeviceManager::getID(){

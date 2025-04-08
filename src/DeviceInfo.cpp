@@ -15,3 +15,13 @@ int DeviceInfoCheckSocket::checkInfo(QVariantList& cfgInfo){
     }
     return 0;
 }
+
+std::shared_ptr<QJsonObject> DeviceInfo::getDeviceInfo(){
+    auto infoJsonObj=std::make_shared<QJsonObject>();
+    infoJsonObj->insert("name",deviceName);
+    infoJsonObj->insert("type",static_cast<int>(deviceType));
+    infoJsonObj->insert("config",QJsonArray::fromVariantList(configInfoValue));
+    infoJsonObj->insert("variables",QJsonObject::fromVariantMap(variablesMap));
+    infoJsonObj->insert("variableOnApp",variableOnApp);
+    return infoJsonObj;
+}

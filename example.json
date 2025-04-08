@@ -13,7 +13,7 @@
                 "data":["temprature","CO2Density"],
                 "dataOnChart":["temprature","luxChange"]
             },
-            "displayedInfo":"None"//显示在小图标上的信息，是变量信息的其中之一
+            "variableOnApp":"None"//显示在小图标上的信息，是变量信息的其中之一
         },
         {
             "name": "Device 2",
@@ -24,7 +24,7 @@
                 "data":["count","check"],
                 "dataOnChart":[]
             },
-            "displayedInfo":"Temperature"
+            "variableOnApp":"Temperature"
         }
     ]
 }

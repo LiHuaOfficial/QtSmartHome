@@ -2,9 +2,12 @@ cmake_minimum_required(VERSION 3.16)
 
 project(QtSmartHome VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)#generate .qmlls.ini needed by language server,helping complete qml module create by cpp
+
+#set(CMAKE_PREFIX_PATH "D:/codes/cpp_components")
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 

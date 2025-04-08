@@ -83,3 +83,4 @@ CMakeLists.txt.user*
 CMakeFiles/
 .cache/
 **/.qmlls.ini
+.vscode/
