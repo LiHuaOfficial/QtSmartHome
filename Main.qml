@@ -15,7 +15,6 @@ Window {
     title:"SmartHome"
 
     property int selectedView: 0
-    
 
     Notification {
         id: notification
@@ -52,7 +51,6 @@ Window {
 
     TopBar{
         id:topBar
-
         z:5
 
         width:window.width
@@ -62,12 +60,14 @@ Window {
             sideBar.foldStatus=!sideBar.foldStatus
             //notification.notify("message",Notification.Message,1000)
         }
+        onReturnButtonClicked:{
+            window.selectedView=0
+            //console.log("return button clicked")
+        }
     }
     SideBar{
         id:sideBar
-
         z:5
-
         anchors.top:topBar.bottom
         width: parent.width/6
         height: parent.height-topBar.height
@@ -93,6 +93,15 @@ Window {
                 notification.notify(message,type,timeout)
             }
         }
+        Connections{//topbar浮现返回按钮
+            target:mainView
+            function onDeviceAppClicked(deviceId: int){
+                window.selectedView=4
+                topBar.topBarInDeviceView=true
+                deviceView.infoMap=DeviceManager.getDeviceInfo(deviceId)
+            }
+        }
+
         AddView{
             id:addView
             index:1
@@ -117,6 +126,21 @@ Window {
                 notification.notify(message,type,timeout)
             }
         }
+        
+        //单独显示每个设备
+        DeviceView{
+            id:deviceView
+            index:4
+            anchors.fill:parent
+            selectedView:window.selectedView
+        }
+        Connections{
+            target:deviceView
+            function onNotificationTrigged(message: string,type: int,timeout: int){
+                notification.notify(message,type,timeout)
+            }
+        }
+
     }
 
     Connections {

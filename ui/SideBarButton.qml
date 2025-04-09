@@ -4,7 +4,7 @@ Rectangle {
 
     color:"white"
     radius:10
-    z: 5
+    z: 2
     signal buttonClicked
 
     Image {

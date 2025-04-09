@@ -10,6 +10,9 @@ import QtSmartHome 1.0
 BaseView {
     id:base
     property int tempInfo: 0
+
+    signal deviceAppClicked(int deviceId)
+
     Timer{
         id: timer
         interval: 1000
@@ -23,19 +26,20 @@ BaseView {
     }
 
     //用于debug
-    Button{
-        z:2
-        anchors.right:parent.right
-        width:parent.width/10
-        onClicked:{
-            console.log("main btn clicked")
-            modelApp.append({name:base.tempInfo.toString(),deviceType:QtSmartHomeGlobal.BLE})
+    // Button{
+    //     z:2
+    //     anchors.right:parent.right
+    //     width:parent.width/10
+    //     onClicked:{
+    //         console.log("main btn clicked")
+    //         modelApp.append({name:base.tempInfo.toString(),deviceType:QtSmartHomeGlobal.BLE})
 
-            for(var i=0;i<gridView.count;i++){
-                console.log(modelApp.get(i).deviceid)//id是modelApp中的值，Id是DeviceApp中的变量
-            }
-        }
-    }
+    //         for(var i=0;i<gridView.count;i++){
+    //             console.log(modelApp.get(i).deviceid)//id是modelApp中的值，Id是DeviceApp中的变量
+    //         }
+    //     }
+    // }
+    
     GridView {
         id:gridView
         property int appWidth: base.width/6
@@ -51,28 +55,13 @@ BaseView {
             id:modelApp
 
 
-            ListElement{
-                deviceid:12
-                active:true
-                name:"Helloo"
-                deviceType:QtSmartHomeGlobal.Socket
-            }
-            ListElement {
-                deviceid:11
-                active:true
-                name:"Hello"
-                deviceType:QtSmartHomeGlobal.Socket
-            }
-            ListElement {
-                active:false
-                name:"Test"
-                deviceType:QtSmartHomeGlobal.BLE
-            }
-            ListElement {
-                active:true
-                name:"TEST"
-                deviceType:QtSmartHomeGlobal.HTTP
-            }
+            // ListElement{
+            //     deviceid:0
+            //     active:true
+            //     name:"Helloo"
+            //     deviceType:QtSmartHomeGlobal.Socket
+            // }
+
         }
         delegate: DeviceApp{
             //提供一些可靠性，当类型错误时会有报错信息
@@ -86,6 +75,11 @@ BaseView {
             isActivate:active
             width:gridView.appWidth
             type:deviceType
+
+            onDeviceAppClicked:{
+                //console.log("app clicked,id:",deviceid) 
+                base.deviceAppClicked(deviceid)
+            }
         }
     }
 
@@ -106,7 +100,8 @@ BaseView {
             modelApp.append({
                              deviceid:id,//DeviceManger可以获取id对应信息
                              name:infoMap["name"],
-                             deviceType:infoMap["type"]
+                             deviceType:infoMap["type"],
+                             active:false
                              })
         }
 

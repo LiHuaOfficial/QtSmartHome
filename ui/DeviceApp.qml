@@ -9,6 +9,8 @@ Rectangle {
     property int type
     property int deviceId
     
+    signal deviceAppClicked
+
     width:40
     height:width
 
@@ -56,4 +58,10 @@ Rectangle {
         text:deviceApp.info
     }
 
+    MouseArea{
+        anchors.fill:parent
+        onClicked:{
+            deviceApp.deviceAppClicked()
+        }
+    }
 }

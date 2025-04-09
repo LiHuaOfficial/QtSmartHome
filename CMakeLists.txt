@@ -45,9 +45,10 @@ qt_add_qml_module(appQtSmartHome
         QML_FILES ui/TopBar.qml
         QML_FILES ui/DeviceApp.qml
         QML_FILES ui/Notification.qml
+        QML_FILES ui/DeviceView.qml
         RESOURCES assets/house_icon.png assets/bluetooth_icon.png assets/wifi_icon.png assets/http_icon.png
         RESOURCES assets/app_icon_ai.png assets/app_icon_ai.ico assets/tick_icon.png assets/add_icon.png
-        RESOURCES assets/delete_icon.png assets/plus_icon.png
+        RESOURCES assets/delete_icon.png assets/plus_icon.png assets/return_icon.png
         RESOURCES assets/notification_error_icon.png assets/notification_info_icon.png assets/notification_success_icon.png assets/notification_warn_icon.png
         SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h
         SOURCES inc/DeviceManager.h

@@ -21,7 +21,7 @@ class DeviceManager:public QObject{
 public:
     using DeviceType=QtSmartHomeGlobal::DeviceType;
 
-    const int MAX_ID_NUM=20;
+    const int MAX_ID_NUM=20;//id:1~MAX_ID_NUM
 
     //生成或读取根目录下的config.JSON
     explicit DeviceManager();

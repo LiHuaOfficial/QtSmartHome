@@ -41,7 +41,13 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
             QJsonDocument doc=QJsonDocument::fromJson(configFile.readAll());
             QJsonObject rootObj=doc.object();
             QJsonArray devicesArray=rootObj.value("devices").toArray();
-            for(int i=0;i<devicesArray.size();i++){
+            
+            if (devicesArray.size()>MAX_ID_NUM)
+            {
+                qDebug()<<"too many devices,"<<MAX_ID_NUM<<"will be used";
+            }
+            
+            for(int i=0;i<devicesArray.size() && i<MAX_ID_NUM;i++){
                 QJsonObject deviceObj=devicesArray.at(i).toObject();
 
                 QJsonArray cfgInfo=deviceObj.value("config").toArray();

@@ -4,7 +4,36 @@ Rectangle {
     id:topBar
 
     //property date currentDateTime: new Date()
+    property bool topBarInDeviceView:false
+
+    width:parent.width 
     signal sideBarButtonClicked
+    signal returnButtonClicked
+
+    states: [
+        State {
+            name: "topBarInDeviceView"
+            when: topBar.topBarInDeviceView==true
+            PropertyChanges {
+                sideBarButton.opacity: 0
+                returnButton.opacity: 1
+            }
+        },
+        State {
+            name: "topBarNotInDeviceView"
+            when: topBar.topBarInDeviceView==false
+            PropertyChanges {
+                sideBarButton.opacity: 1 
+                returnButton.opacity: 0
+            }
+        } 
+    ]
+    transitions:Transition{
+        NumberAnimation{
+            property:"opacity"
+            duration:500
+        }
+    }
 
     Component.onCompleted: timer.start()
     Timer{
@@ -20,11 +49,32 @@ Rectangle {
             //console.log("timer triggered")
         }
     }
+    Rectangle{
+        id:returnButton
+        anchors.left: parent.left
 
+        z:topBar.topBarInDeviceView?3:0//sidebarbtn z=2
+        
+        width:topBar.height
+        height:returnButton.width
+        Image{
+            anchors.fill: parent
+            source: "../assets/return_icon.png"
+        }
+        MouseArea{
+            anchors.fill: parent
+            
+            onClicked:{
+                //console.log("ma:return button clicked")
+                topBar.returnButtonClicked()
+                topBar.topBarInDeviceView=false
+            }
+        }
+    }
     SideBarButton{
         id:sideBarButton
 
-        //anchors.left: parent
+        anchors.left: parent.left
 
         width:topBar.height
         height:sideBarButton.width
