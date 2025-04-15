@@ -1,6 +1,3 @@
-set(CMAKE_TOOLCHAIN_FILE "D:/Application/vcpkg/scripts/buildsystems/vcpkg.cmake")
-
-set(VCPKG_TARGET_TRIPLET "x64-mingw-static")
 
 # set(CMAKE_CXX_STANDARD 17)
 # set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,6 +18,10 @@ set(QT_QML_GENERATE_QMLLS_INI ON)#generate .qmlls.ini needed by language server,
 
 
 
+
+find_package(Boost REQUIRED COMPONENTS boost::asio)
+find_package(fmt)
+#set(CMAKE_PREFIX_PATH "D:/Application/Qt/6.8.1/mingw_64")
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.5)
@@ -30,9 +31,6 @@ qt_policy(SET QTP0004 NEW)
 qt_add_executable(appQtSmartHome
     main.cpp
 )
-
-find_package(unofficial-sqlite3 CONFIG REQUIRED)
-target_link_libraries(appQtSmartHome PRIVATE unofficial::sqlite3::sqlite3)
 
 #help finding headers(qml module create by cpp)
 target_include_directories(appQtSmartHome PRIVATE inc common)
@@ -86,7 +84,7 @@ set_target_properties(appQtSmartHome PROPERTIES
 )
 
 target_link_libraries(appQtSmartHome
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick fmt::fmt boost::boost
 )
 
 include(GNUInstallDirs)

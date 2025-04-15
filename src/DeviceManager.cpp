@@ -8,7 +8,10 @@
 #include <qlogging.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
-#include <sqlite3.h>
+
+#include "boost/asio.hpp"
+#include <fmt/core.h>
+
 void ConvertJsonArrayToQVector(QJsonArray &jsonArray, QVector<QString> &vector) {
     for (int i = 0; i < jsonArray.size(); i++) {
         vector.push_back(jsonArray.at(i).toString());
@@ -16,19 +19,6 @@ void ConvertJsonArrayToQVector(QJsonArray &jsonArray, QVector<QString> &vector) 
 }
 DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()+"/config.json"){
     qDebug()<<configFile.fileName();
-    
-    // sqlite3 *db;
-    // char *zErrMsg = 0;
-    // int rc;
-
-    // // 打开数据库（如果不存在则创建）
-    // rc = sqlite3_open("example.db", &db);
-    // if (rc) {
-    //     qDebug()<<"Can't open database";
-    //     sqlite3_close(db);
-    // } else {
-    //     qDebug()<<"Opened database successfully";
-    // }
 
     //初始化所有id以待取用，（初始化移到初始化QMLengine前会不会好些？）
     for(int i=1;i<=MAX_ID_NUM;i++){
