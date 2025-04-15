@@ -1,14 +1,25 @@
+
+# set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# # 添加编译器选项
+# add_compile_options("/permissive-")
+# add_compile_options("/Zc:__cplusplus")
+
 cmake_minimum_required(VERSION 3.16)
 
 project(QtSmartHome VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)#generate .qmlls.ini needed by language server,helping complete qml module create by cpp
 
-#set(CMAKE_PREFIX_PATH "D:/codes/cpp_components")
 
+find_package(Boost REQUIRED COMPONENTS boost::asio)
+find_package(fmt)
+#set(CMAKE_PREFIX_PATH "D:/Application/Qt/6.8.1/mingw_64")
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.5)
@@ -72,7 +83,7 @@ set_target_properties(appQtSmartHome PROPERTIES
 )
 
 target_link_libraries(appQtSmartHome
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick fmt::fmt boost::boost
 )
 
 include(GNUInstallDirs)
