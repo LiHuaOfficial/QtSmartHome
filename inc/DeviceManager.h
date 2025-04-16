@@ -50,10 +50,14 @@ public:
         //variablesMap.insert("id",)
         return variablesMap;
     };
+
+    
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
     void deviceAdded(int id);
     void deviceManagerError(QString errorMsg);
+    void deviceEnable(int id);
+    
 private:
     using IDSet=std::set<int>;
     using IDInfoMap=QMap<int,DeviceInfo>;

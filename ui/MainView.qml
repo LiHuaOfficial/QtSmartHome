@@ -54,14 +54,7 @@ BaseView {
         model:ListModel{
             id:modelApp
 
-
-            // ListElement{
-            //     deviceid:0
-            //     active:true
-            //     name:"Helloo"
-            //     deviceType:QtSmartHomeGlobal.Socket
-            // }
-
+            //config.json为空时会无法添加
         }
         delegate: DeviceApp{
             //提供一些可靠性，当类型错误时会有报错信息

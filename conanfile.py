@@ -9,7 +9,7 @@ class QtSmartHome(ConanFile):
 
     default_options = {
         "boost/*:without_fiber": True,
-        "boost/*:without_stacktrace": True,
+        "boost/*:without_stacktrace": True,#gcc非header_only模式下编译以上两个库会报错，所以需要设置为True
         "boost/*:header_only": True,
     }
     def requirements(self):

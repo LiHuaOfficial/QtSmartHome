@@ -4,8 +4,8 @@
 #include <qlogging.h>
 #include <qquickview.h>
 
-#include "inc/ProtocolControl.h"
 #include "inc/DeviceManager.h"
+#include "inc/CommunManager.h"
 #include "common/QtSmartHomeGlobal.h"
 
 int main(int argc, char *argv[])
@@ -15,8 +15,13 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/assets/app_icon_ai.ico"));
 
-    DeviceManager::create(nullptr, nullptr);//需要提前初始化，否则QML中无法访问？？？
-    qmlRegisterType<ProtocolControl>("QtSmartHome", 1, 0, "ProtocolControl");
+    
+    //需要提前初始化，否则QML中无法访问？？？
+    QObject::connect(DeviceManager::create(nullptr, nullptr), &DeviceManager::deviceEnable,
+                     CommunManager::getInstance(), &CommunManager::deviceEnable);
+
+    //DeviceManager::create(nullptr, nullptr)->deviceEnable(1);
+
     qmlRegisterSingletonType<DeviceManager>("QtSmartHome", 1, 0, "DeviceManager", DeviceManager::create);
     qmlRegisterUncreatableType<QtSmartHomeGlobal>("QtSmartHome", 1, 0, "QtSmartHomeGlobal", "Cannot instantiate global type");
     QQmlApplicationEngine engine;

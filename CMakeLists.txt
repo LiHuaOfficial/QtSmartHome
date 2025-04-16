@@ -40,35 +40,29 @@ set_source_files_properties(common/ColorStyle.qml common/Common.qml
 qt_add_qml_module(appQtSmartHome
     URI QtSmartHome
     VERSION 1.0
-    QML_FILES
-        Main.qml
-        QML_FILES ui/SideBar.qml
-        QML_FILES ui/SideBarButton.qml
-        RESOURCES assets/geer_icon.png
-        QML_FILES ui/SideBarContent.qml
-        QML_FILES common/ColorStyle.qml
-        QML_FILES common/Common.qml
-        QML_FILES ui/ViewRowItem.qml
-        QML_FILES ui/BaseView.qml
-        QML_FILES ui/AddView.qml
-        QML_FILES ui/SettingView.qml
-        QML_FILES ui/MainView.qml
-        QML_FILES ui/TopBar.qml
-        QML_FILES ui/DeviceApp.qml
-        QML_FILES ui/Notification.qml
-        QML_FILES ui/DeviceView.qml
-        RESOURCES assets/house_icon.png assets/bluetooth_icon.png assets/wifi_icon.png assets/http_icon.png
-        RESOURCES assets/app_icon_ai.png assets/app_icon_ai.ico assets/tick_icon.png assets/add_icon.png
-        RESOURCES assets/delete_icon.png assets/plus_icon.png assets/return_icon.png
-        RESOURCES assets/notification_error_icon.png assets/notification_info_icon.png assets/notification_success_icon.png assets/notification_warn_icon.png
-        SOURCES src/ProtocolControl.cpp inc/ProtocolControl.h
-        SOURCES inc/DeviceManager.h
-        SOURCES src/DeviceManager.cpp
-        SOURCES common/QtSmartHomeGlobal.h
-        SOURCES
-        SOURCES src/DeviceInfo.cpp
-        SOURCES 
-        SOURCES inc/DeviceInfo.h     #DEPENDENCIES QObject
+    QML_FILES Main.qml
+    QML_FILES ui/SideBar.qml
+    QML_FILES ui/SideBarButton.qml
+    QML_FILES ui/SideBarContent.qml
+    QML_FILES common/ColorStyle.qml
+    QML_FILES common/Common.qml
+    QML_FILES ui/ViewRowItem.qml
+    QML_FILES ui/BaseView.qml
+    QML_FILES ui/AddView.qml
+    QML_FILES ui/SettingView.qml
+    QML_FILES ui/MainView.qml
+    QML_FILES ui/TopBar.qml
+    QML_FILES ui/DeviceApp.qml
+    QML_FILES ui/Notification.qml
+    QML_FILES ui/DeviceView.qml
+    RESOURCES assets/house_icon.png assets/bluetooth_icon.png assets/wifi_icon.png assets/http_icon.png
+    RESOURCES assets/app_icon_ai.png assets/app_icon_ai.ico assets/tick_icon.png assets/add_icon.png
+    RESOURCES assets/delete_icon.png assets/plus_icon.png assets/return_icon.png assets/geer_icon.png
+    RESOURCES assets/notification_error_icon.png assets/notification_info_icon.png assets/notification_success_icon.png assets/notification_warn_icon.png
+    SOURCES inc/DeviceManager.h src/DeviceManager.cpp
+    SOURCES common/QtSmartHomeGlobal.h
+    SOURCES inc/DeviceInfo.h src/DeviceInfo.cpp #DEPENDENCIES QObject
+    SOURCES inc/CommunManager.h src/CommunManager.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
