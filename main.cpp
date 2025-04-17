@@ -15,10 +15,19 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/assets/app_icon_ai.ico"));
 
+    qDebug() << "QtSmartHome main thread id:" << QThread::currentThreadId();
     
     //需要提前初始化，否则QML中无法访问？？？
-    QObject::connect(DeviceManager::create(nullptr, nullptr), &DeviceManager::deviceEnable,
-                     CommunManager::getInstance(), &CommunManager::deviceEnable);
+    QObject::connect(DeviceManager::create(nullptr, nullptr),&DeviceManager::deviceEnable,
+                     CommunManager::getInstance(),&CommunManager::deviceEnable);
+
+    QObject::connect(CommunManager::getInstance(),&CommunManager::triggerDeviceEnable,
+    CommunManager::getInstance(),&CommunManager::deviceEnable);
+    auto cm = CommunManager::getInstance();
+
+    cm->testWork();
+    cm->testWork2();
+
 
     //DeviceManager::create(nullptr, nullptr)->deviceEnable(1);
 
