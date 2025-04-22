@@ -64,7 +64,9 @@ public:
     int getInfoCode(){return badInfo;};
 
     ~DeviceInfo(){
-        delete check;
+        if(check){
+            delete check;
+        }
     };
 
 //private:
@@ -77,6 +79,6 @@ public:
     QVariantMap variablesMap;
     QString variableOnApp;
 
-    DeviceInfoCheck* check;
+    DeviceInfoCheck* check=nullptr;
 };
 #endif
