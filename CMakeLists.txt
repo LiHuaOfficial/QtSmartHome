@@ -22,12 +22,19 @@ find_package(fmt)
 #set(CMAKE_PREFIX_PATH "D:/Application/Qt/6.8.1/mingw_64")
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    MESSAGE("building on Windows")
+    link_libraries(ws2_32 mswsock)
+endif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_policy(SET QTP0004 NEW)
 
 qt_add_executable(appQtSmartHome
     main.cpp
+    inc/CommunManager.h 
+    src/CommunManager.cpp
 )
 
 #help finding headers(qml module create by cpp)
@@ -62,7 +69,6 @@ qt_add_qml_module(appQtSmartHome
     SOURCES inc/DeviceManager.h src/DeviceManager.cpp
     SOURCES common/QtSmartHomeGlobal.h
     SOURCES inc/DeviceInfo.h src/DeviceInfo.cpp #DEPENDENCIES QObject
-    SOURCES inc/CommunManager.h src/CommunManager.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -68,7 +68,7 @@ public:
     };
 
 //private:
-    int8_t badInfo;
+    int8_t badInfo=0;
 
     QString deviceName;
     DeviceType deviceType;

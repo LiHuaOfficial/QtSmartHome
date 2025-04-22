@@ -13,6 +13,7 @@
 
 #include "QtSmartHomeGlobal.h"
 #include "inc/DeviceInfo.h"
+#include "inc/CommunManager.h"
 
 class DeviceManager:public QObject{
     Q_OBJECT
@@ -28,7 +29,7 @@ public:
     ~DeviceManager();
     
     //在QML前初始化
-    static DeviceManager* create(QQmlEngine* engine, QJSEngine* scriptEngine) {
+    static DeviceManager* getInstance(QQmlEngine* engine, QJSEngine* scriptEngine) {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
         static DeviceManager instance;
@@ -50,13 +51,20 @@ public:
         //variablesMap.insert("id",)
         return variablesMap;
     };
-
     
+    Q_INVOKABLE void changeDeviceStatus(int id,bool status){
+        CommunManager::getInstance(nullptr,nullptr)->changeDeviceStatus(id,status);
+    }
+
+    DeviceInfo& getDeviceInfoRaw(int id){
+        //由于DeviceInfo没有拷贝构造函数，返回值会报错(值为nullptr好像不会报错？)
+        return idInfoMap[id];
+    };
+
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
     void deviceAdded(int id);
     void deviceManagerError(QString errorMsg);
-    void deviceEnable(int id);
     
 private:
     using IDSet=std::set<int>;

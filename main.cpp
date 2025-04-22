@@ -17,21 +17,28 @@ int main(int argc, char *argv[])
 
     qDebug() << "QtSmartHome main thread id:" << QThread::currentThreadId();
     
+    CommunManager::getInstance(nullptr, nullptr);
+    DeviceManager::getInstance(nullptr, nullptr);
+    
+    //auto t=DeviceManager::getInstance(nullptr, nullptr)->getDeviceInfoRaw2(1);
     //需要提前初始化，否则QML中无法访问？？？
-    QObject::connect(DeviceManager::create(nullptr, nullptr),&DeviceManager::deviceEnable,
-                     CommunManager::getInstance(),&CommunManager::deviceEnable);
+    // QObject::connect(DeviceManager::getInstance(nullptr, nullptr),&DeviceManager::deviceEnable,
+    //                  CommunManager::getInstance(nullptr, nullptr),&CommunManager::changeDeviceStatus);
 
-    QObject::connect(CommunManager::getInstance(),&CommunManager::triggerDeviceEnable,
-    CommunManager::getInstance(),&CommunManager::deviceEnable);
-    auto cm = CommunManager::getInstance();
+    //测试用
+    // QObject::connect(CommunManager::getInstance(),&CommunManager::triggerDeviceEnable,
+    //                 CommunManager::getInstance(),&CommunManager::testWork2);
+    
+    // auto cm = CommunManager::getInstance();
 
-    cm->testWork();
-    cm->testWork2();
+    // cm->testWork();
+    // cm->testWork2();//槽函数内可以创建线程
 
 
     //DeviceManager::create(nullptr, nullptr)->deviceEnable(1);
 
-    qmlRegisterSingletonType<DeviceManager>("QtSmartHome", 1, 0, "DeviceManager", DeviceManager::create);
+    //qmlRegisterSingletonType<CommunManager>("QtSmartHome", 1, 0, "CommunManager", CommunManager::getInstance);
+    qmlRegisterSingletonType<DeviceManager>("QtSmartHome", 1, 0, "DeviceManager", DeviceManager::getInstance);
     qmlRegisterUncreatableType<QtSmartHomeGlobal>("QtSmartHome", 1, 0, "QtSmartHomeGlobal", "Cannot instantiate global type");
     QQmlApplicationEngine engine;
     

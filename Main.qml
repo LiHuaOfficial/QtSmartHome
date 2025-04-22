@@ -42,7 +42,7 @@ Window {
     }
 
     //device manager信号处理
-        Connections{
+    Connections{
         target:DeviceManager
         function onDeviceManagerError(msg:string){
             notification.notify(msg,Notification.Error,3000)
@@ -99,6 +99,7 @@ Window {
                 window.selectedView=4
                 topBar.topBarInDeviceView=true
                 deviceView.infoMap=DeviceManager.getDeviceInfo(deviceId)
+                deviceView.deviceId=deviceId
             }
         }
 
