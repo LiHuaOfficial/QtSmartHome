@@ -56,6 +56,7 @@ public:
         CommunManager::getInstance(nullptr,nullptr)->changeDeviceStatus(id,status);
     }
 
+    //后续实现删除设备的功能要注意这里引用的问题
     DeviceInfo& getDeviceInfoRaw(int id){
         //由于DeviceInfo没有拷贝构造函数，返回值会报错(值为nullptr好像不会报错？)
         return idInfoMap[id];

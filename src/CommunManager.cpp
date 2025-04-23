@@ -8,6 +8,9 @@
 #include "boost/asio.hpp"
 
 #include <iostream>
+#include "CommunManager.h"
+
+#include "SocketServer.h"
 
 CommunManager::CommunManager()
 {
@@ -33,9 +36,10 @@ CommunManager::CommunManager()
                         {
                             deviceEnable(cmd.first);
 
-                            threadStatusMap[cmd.first]=true;
+                            threadStatusMap[cmd.first]=true;//TODO：一段时间内禁止调整
                         }else{
                             //结束线程
+                            //TODO:调用io_context.stop()？
                             threadStatusMap[cmd.first]=false;//子线程检测这个值为false时结束
                         }
                         
@@ -56,12 +60,26 @@ CommunManager::CommunManager()
     communManagerThread->detach();
 }
 
+int CommunManager::dataHandler(int id, int length)
+{
+    qDebug()<<"CM:On data recv:"<<std::string(read_buffer,length);
+    return 0;
+}
+
 void CommunManager::SocketWork(int id,int port){
     //deviceinfo怎么传参需要思考一下
-    
-    std::thread *socketThread=new std::thread([this]() {
-          std::this_thread::sleep_for(std::chrono::seconds(1));//等待1s
-          qDebug()<<"CM:SocketWork:"<<QThread::currentThreadId();
+
+     std::thread *socketThread=new std::thread([this,id,port]() {
+
+        try {
+            boost::asio::io_context io_context;
+
+            SocketServer s(io_context, port);
+
+            io_context.run();
+        } catch (std::exception& e) {
+            std::cerr << "Exception: " << e.what() << std::endl;
+        }
 
     });
     socketThread->detach();
@@ -82,7 +100,7 @@ void CommunManager::deviceEnable(int id)
     switch (info.getDeviceType()) {
         case QtSmartHomeGlobal::DeviceType::Socket: {
             
-            SocketWork(id,1234);
+            SocketWork(id,info.configInfoValue[1].toInt());
             break;   
         }
         default: {

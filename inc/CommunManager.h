@@ -43,11 +43,15 @@ public:
     
     
 private:
-    
+    int dataHandler(int id,int length);
     void SocketWork(int id,int port);
-    enum { max_buffer_length = 1024 };
+
+    enum { min_buffer_length = 128,max_buffer_length = 1024 };
+    char read_buffer[max_buffer_length];
+    char write_buffer[min_buffer_length];
 
     void deviceEnable(int id);
+
     //以下是通信线程（中间件，负责把队列信息搬入搬出，创建新的子线程）的管理
     std::mutex sendQueueMutex;
     std::queue<std::pair<int,bool>> sendQueue;
