@@ -17,13 +17,16 @@ private:
     tcp::socket socket_;
     enum { max_length = 1024 };
     char data_[max_length];
-
+    char write_buffer_[max_length]={'a','b','c','d','e'};
     void do_read() {
         auto self(shared_from_this());
         socket_.async_read_some(boost::asio::buffer(data_, max_length),
                                 [this, self](boost::system::error_code ec, std::size_t length) {
             if (!ec) {
-                do_write(length);
+                //处理数据
+
+                do_read();
+
             } else {
                 std::cerr << "Client disconnected with error: " << ec.message() << std::endl;
             }
@@ -52,6 +55,7 @@ public:
 
 private:
     tcp::acceptor acceptor_;
+    
 
     void do_accept() {
         acceptor_.async_accept([this](boost::system::error_code ec, tcp::socket socket) {

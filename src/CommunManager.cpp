@@ -27,8 +27,12 @@ CommunManager::CommunManager()
 
                 //根据命令创建线程或结束线程
                 std::lock_guard<std::mutex> lock(sendQueueMutex);
-                if(!sendQueue.empty()){
-                    auto cmd=sendQueue.front();
+                if(!sendQueue.empty() &&
+                    sendQueue.front().getMessageType()==CommunMessage::MessageType::TypeSyscmd &&
+                    sendQueue.front().getSyscmdMessageType()==CommunMessage::SyscmdMessageType::BoolStatus){//有控制命令
+
+                    std::pair<int,bool> cmd={sendQueue.front().getId(),sendQueue.front().getStatus()};
+
                     std::lock_guard<std::mutex> lock(threadStatusMutex);
                     if (threadStatusMap[cmd.first]!=cmd.second)//有效命令
                     {
@@ -42,12 +46,8 @@ CommunManager::CommunManager()
                             //TODO:调用io_context.stop()？
                             threadStatusMap[cmd.first]=false;//子线程检测这个值为false时结束
                         }
-                        
                     }
-                    
-                    sendQueue.pop();
                 }
-
                 timer.expires_after(communManagerThreadInteval);
                 timer.async_wait(timer_handler);
             }else{
@@ -60,20 +60,14 @@ CommunManager::CommunManager()
     communManagerThread->detach();
 }
 
-int CommunManager::dataHandler(int id, int length)
-{
-    qDebug()<<"CM:On data recv:"<<std::string(read_buffer,length);
-    return 0;
-}
-
 void CommunManager::SocketWork(int id,int port){
-    //deviceinfo怎么传参需要思考一下
 
      std::thread *socketThread=new std::thread([this,id,port]() {
-
+        using namespace boost::asio;
         try {
             boost::asio::io_context io_context;
 
+            //TODO:server数据接收，数据发送，关闭server(context stop)
             SocketServer s(io_context, port);
 
             io_context.run();
@@ -84,16 +78,11 @@ void CommunManager::SocketWork(int id,int port){
     });
     socketThread->detach();
     
-    
 }
 
 void CommunManager::deviceEnable(int id)
 {
     qDebug()<<"CM:deviceEnable:"<<id;
-    // if(id==5 || id==6){
-    //     return;
-    // }
-    
     //关注信息的生存期问题
     auto& info=DeviceManager::getInstance(nullptr,nullptr)->getDeviceInfoRaw(id);
     
