@@ -13,7 +13,7 @@
 #include <QMap>
 
 #include "boost/lockfree/queue.hpp"
-
+#include "boost/asio.hpp"
 #include "inc/DeviceInfo.h"
 #include "inc/CommunMessage.h"
 /*
@@ -37,6 +37,7 @@ public:
 
 
     //---------------call by DeviceManager----------------
+    //前端发出控制线程开始或关闭命令
     void changeDeviceStatus(int id,bool status){
         sendQueue.push(CommunMessage(id,status));
     };
@@ -56,6 +57,11 @@ public:
             return data;
         }
         return "";
+    }
+
+    bool getThreadStatus(int id){
+        std::lock_guard<std::mutex> lock(threadStatusMutex);
+        return threadStatusMap[id].first;
     }
 
     //Server向队列中放入数据
@@ -80,7 +86,7 @@ private:
     std::queue<CommunMessage> recvQueue;
 
     std::mutex threadStatusMutex;
-    std::unordered_map<int,bool> threadStatusMap; 
+    std::unordered_map<int,std::pair<bool,std::shared_ptr<boost::asio::io_context> >> threadStatusMap; 
 
     const std::chrono::milliseconds communManagerThreadInteval{5000}; 
 };

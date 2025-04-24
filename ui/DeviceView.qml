@@ -30,7 +30,7 @@ BaseView{
                 //CommunManager.deviceEnable(deviceView.deviceId)
                 //新api，api将往命令队列里放入信息等待处理
             }else{
-
+                DeviceManager.changeDeviceStatus(deviceView.deviceId,false)
             }
         }
     }

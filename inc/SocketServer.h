@@ -13,10 +13,8 @@ public:
     Session(int id,tcp::socket socket) : id_(id),socket_(std::move(socket)),sessionTick(socket_.get_executor(),std::chrono::seconds(1)) {}
 
     void start() {
-        //auto self(shared_from_this());
-        
         //开启定时器
-        sessionTick.async_wait(std::bind(&Session::timer_handler, this, std::placeholders::_1));
+        start_timer();
 
         do_read();
     }
@@ -30,18 +28,22 @@ private:
     char dataRead_[max_length];
     char dataSend_[max_length];
 
-    void timer_handler(const boost::system::error_code& error) {
+    void start_timer() {
         auto self(shared_from_this());
-        if (!error) {
-            auto str=CommunManager::getInstance(nullptr,nullptr)->getSendData(id_);
-
-            int sendLenth=str.length()>max_length?max_length:str.length();
-            memcpy(dataSend_,str.c_str(),sendLenth);
-
-            do_write(str.length());
-        } 
-        sessionTick.expires_after(std::chrono::seconds(1));
-        sessionTick.async_wait(std::bind(&Session::timer_handler, this, std::placeholders::_1));
+        sessionTick.async_wait([this,self](boost::system::error_code ec){
+            if (!ec) {
+                auto str=CommunManager::getInstance(nullptr,nullptr)->getSendData(id_);
+                if(str.length()>=1){
+                    int sendLenth=str.length()>max_length?max_length:str.length();
+                    memcpy(dataSend_,str.c_str(),sendLenth);
+        
+                    do_write(str.length());
+    
+                    sessionTick.expires_after(std::chrono::seconds(1));
+                }
+                start_timer();
+            } 
+        });
     };
 
     void do_read() {

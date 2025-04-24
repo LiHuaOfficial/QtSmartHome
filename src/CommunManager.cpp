@@ -25,8 +25,6 @@ CommunManager::CommunManager()
             if (!error) {
                 qDebug()<<"CM:timer work"<<QThread::currentThreadId();
 
-                
-
                 //根据命令创建线程或结束线程
                 std::lock_guard<std::mutex> lock(sendQueueMutex);
                 if(!sendQueue.empty()){//非空
@@ -36,21 +34,26 @@ CommunManager::CommunManager()
                         std::pair<int,bool> cmd={sendQueue.front().getId(),sendQueue.front().getStatus()};
 
                         std::lock_guard<std::mutex> lock(threadStatusMutex);
-                        if (threadStatusMap[cmd.first]!=cmd.second)//有效命令
+                        if (threadStatusMap[cmd.first].first!=cmd.second)//有效命令
                         {
                             if (cmd.second)//开启
                             {
                                 deviceEnable(cmd.first);
 
-                                threadStatusMap[cmd.first]=true;//TODO：一段时间内禁止调整
+                                threadStatusMap[cmd.first].first=true;
+                                threadStatusMap[cmd.first].second=nullptr;
+                                //sendData(1,"hello",true);//测试发送无误
                             }else{
                                 //结束线程
-                                threadStatusMap[cmd.first]=false;//子线程检测这个值为false时结束
+                                threadStatusMap[cmd.first].first=false;//子线程检测这个值为false时结束
+                                if(threadStatusMap[cmd.first].second!=nullptr){
+                                    threadStatusMap[cmd.first].second->stop();
+                                }
                             }
                         }
                         sendQueue.pop();
                     }else if(sendQueue.front().getMessageType()==CommunMessage::MessageType::TypeData &&
-                             threadStatusMap[sendQueue.front().getId()]==false){//该消息对应设备已关闭
+                             threadStatusMap[sendQueue.front().getId()].first==false){//该消息对应设备已关闭
                                 sendQueue.pop();
                     }
                 }
@@ -68,22 +71,26 @@ CommunManager::CommunManager()
 
 void CommunManager::SocketWork(int id,int port){
 
-     std::thread *socketThread=new std::thread([this,id,port]() {
+    auto socketThread=std::make_shared<std::thread>([this,id,port]() {
         using namespace boost::asio;
         try {
-            boost::asio::io_context io_context;
-
+            
+            auto io_context=std::make_shared<boost::asio::io_context>();
+            
+            threadStatusMutex.lock();
+            threadStatusMap[id].second=io_context;
+            threadStatusMutex.unlock();
             //TODO:server数据接收，数据发送，关闭server(context stop)
-            SocketServer s(id,io_context, port);
+            SocketServer s(id,*io_context, port);
 
-            io_context.run();
+            io_context->run();
+            qDebug()<<"CM:subthread end";
         } catch (std::exception& e) {
             std::cerr << "Exception: " << e.what() << std::endl;
         }
 
     });
     socketThread->detach();
-    
 }
 
 void CommunManager::deviceEnable(int id)
