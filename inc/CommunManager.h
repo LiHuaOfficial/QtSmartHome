@@ -36,11 +36,35 @@ public:
     }
 
 
-
+    //---------------call by DeviceManager----------------
     void changeDeviceStatus(int id,bool status){
-        sendQueue.push(CommunMessage(id,CommunMessage::SyscmdMessageType::BoolStatus,status));
+        sendQueue.push(CommunMessage(id,status));
     };
-    
+    //前端放入信息
+    void sendData(int id,std::string variable,bool status){
+        sendQueue.push(CommunMessage(id,CommunMessage::TypeData,"{"+variable+":"+(status?"true":"false")+"}"));
+    }
+    //TODO:前端获取信息
+
+    //---------------for server---------------------------
+    //Server获取队列中数据
+    std::string getSendData(int id){
+        std::lock_guard<std::mutex> lock(sendQueueMutex);
+        if(!sendQueue.empty() && sendQueue.front().getMessageType()==CommunMessage::MessageType::TypeData &&sendQueue.front().getId()==id){//是自己的消息
+            std::string data=sendQueue.front().getData();
+            sendQueue.pop();
+            return data;
+        }
+        return "";
+    }
+
+    //Server向队列中放入数据
+    void recvData(CommunMessage&& msg){
+        qDebug()<<"recv"<<msg.getData();
+        std::lock_guard<std::mutex> lock(recvQueueMutex);
+        recvQueue.push(msg);
+    }
+
     
 private:
     void SocketWork(int id,int port);
@@ -48,6 +72,7 @@ private:
     void deviceEnable(int id);
 
     //以下是通信线程（中间件，负责把队列信息搬入搬出，创建新的子线程）的管理
+    //队列中直接保存json字符串
     std::mutex sendQueueMutex;
     std::queue<CommunMessage> sendQueue;
 

@@ -1,0 +1,19 @@
+//发送
+{
+    "isOn":true,
+    "sendTemperature":true,
+    "isAvaliable":true
+}
+
+//接收
+{
+    "data":{
+    "temprature":26.1,
+    "CO2Density":0.26
+    },
+    "dataOnChart":{
+        "temprature":11,
+        "luxChange":20
+    }
+}
+
