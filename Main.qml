@@ -141,6 +141,12 @@ Window {
                 notification.notify(message,type,timeout)
             }
         }
+        Connections{
+            target:deviceView
+            function onDeviceEnableStatusChanged(deviceId: int,enable: bool){
+                mainView.modifyDeviceStatus(deviceId,enable)
+            }
+        }
 
     }
 

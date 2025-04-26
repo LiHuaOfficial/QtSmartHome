@@ -5,6 +5,9 @@ BaseView{
 
     property var infoMap
     property int deviceId
+
+    signal deviceEnableStatusChanged(int id,bool enable)
+
     onInfoMapChanged:{
         //刷新信息
         //console.log("deviceView infoMap changed",infoMap,infoMap["name"])
@@ -25,12 +28,15 @@ BaseView{
     Connections{
         target:enableItem
         function onRowItemTriggered(result: int){
+            
             if(result==1){
                 DeviceManager.changeDeviceStatus(deviceView.deviceId,true)
+                deviceView.deviceEnableStatusChanged(deviceView.deviceId,true)
                 //CommunManager.deviceEnable(deviceView.deviceId)
                 //新api，api将往命令队列里放入信息等待处理
             }else{
                 DeviceManager.changeDeviceStatus(deviceView.deviceId,false)
+                deviceView.deviceEnableStatusChanged(deviceView.deviceId,false)
             }
         }
     }

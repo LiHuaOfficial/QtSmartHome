@@ -10,8 +10,14 @@ import QtSmartHome 1.0
 BaseView {
     id:base
     property int tempInfo: 0
-
+    property var idIndexMap:new Map()//删除设备时记得更新这个Map
+    
     signal deviceAppClicked(int deviceId)
+
+    function modifyDeviceStatus(id:int,status){
+        let app=modelApp.get(idIndexMap[id])
+        app.active=status
+    }
 
     Timer{
         id: timer
@@ -26,19 +32,14 @@ BaseView {
     }
 
     //用于debug
-    // Button{
-    //     z:2
-    //     anchors.right:parent.right
-    //     width:parent.width/10
-    //     onClicked:{
-    //         console.log("main btn clicked")
-    //         modelApp.append({name:base.tempInfo.toString(),deviceType:QtSmartHomeGlobal.BLE})
-
-    //         for(var i=0;i<gridView.count;i++){
-    //             console.log(modelApp.get(i).deviceid)//id是modelApp中的值，Id是DeviceApp中的变量
-    //         }
-    //     }
-    // }
+    Button{
+        z:2
+        anchors.right:parent.right
+        width:parent.width/10
+        onClicked:{
+            base.modifyDeviceStatus(1,true)
+        }
+    }
     
     GridView {
         id:gridView
@@ -55,6 +56,8 @@ BaseView {
             id:modelApp
 
             //config.json为空时会无法添加
+   
+                    
         }
         delegate: DeviceApp{
             //提供一些可靠性，当类型错误时会有报错信息
@@ -62,6 +65,8 @@ BaseView {
             required property bool active
             required property string name
             required property int deviceType
+
+            objectName:"app"+deviceid.toString()
 
             deviceId:deviceid
             info:name
@@ -96,6 +101,7 @@ BaseView {
                              deviceType:infoMap["type"],
                              active:false
                              })
+            base.idIndexMap.set(id,modelApp.count-1)
         }
 
     }
@@ -107,6 +113,7 @@ BaseView {
             modelApp.append({deviceid:id,
                              name:infoMap["name"],
                              deviceType:infoMap["type"]})
+            base.idIndexMap.set(id,modelApp.count-1)
         }
     }
 
