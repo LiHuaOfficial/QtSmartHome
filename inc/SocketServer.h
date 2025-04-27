@@ -52,7 +52,8 @@ private:
                                 [this, self](boost::system::error_code ec, std::size_t length) {
             if (!ec) {
                 //数据放入队列
-                CommunManager::getInstance(nullptr,nullptr)->recvData(CommunMessage(id_,CommunMessage::MessageType::TypeData,std::string(dataRead_,length)));
+                //CommunManager::getInstance(nullptr,nullptr)->recvData(CommunMessage(id_,CommunMessage::MessageType::TypeData,std::string(dataRead_,length)));
+                CommunManager::getInstance(nullptr,nullptr)->recvData(id_,std::string(dataRead_,length));
                 do_read();
 
             } else {

@@ -37,6 +37,7 @@ qt_add_executable(appQtSmartHome
     src/CommunManager.cpp
     src/SocketServer.cpp
     inc/SocketServer.h
+    inc/VariableInfo.h
 )
 
 #help finding headers(qml module create by cpp)

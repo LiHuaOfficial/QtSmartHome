@@ -68,7 +68,9 @@ DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()
 
                 int infoCode=info.getInfoCode();
                 if(!infoCode) {
-                    idInfoMap.insert(getID(),info);
+                    int allocatedID=getID();
+                    idInfoMap.insert(allocatedID,info);
+                    idDataMap.insert(allocatedID,std::move(VariableInfo(variables.toVariantMap())));
                     qDebug()<<"info added";
                 }else{
                     qDebug()<<QString("Error:infocode %1").arg(infoCode);
@@ -159,6 +161,7 @@ void DeviceManager::addDevice(QString name,int type,QVariantMap variablesMap,QVa
         return;
     }
     idInfoMap.insert(id,info);
+    getIdDataMap().insert(id,std::move(VariableInfo(variablesMap)));
     emit deviceAdded(id);
     return;
 }

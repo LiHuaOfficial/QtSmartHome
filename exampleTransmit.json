@@ -7,11 +7,11 @@
 
 //接收
 {
-    "data":{
+    "Data":{
     "temprature":26.1,
     "CO2Density":0.26
     },
-    "dataOnChart":{
+    "ChartData":{
         "temprature":11,
         "luxChange":20
     }

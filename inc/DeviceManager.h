@@ -14,6 +14,7 @@
 #include "QtSmartHomeGlobal.h"
 #include "inc/DeviceInfo.h"
 #include "inc/CommunManager.h"
+#include "inc/VariableInfo.h"
 
 class DeviceManager:public QObject{
     Q_OBJECT
@@ -62,6 +63,19 @@ public:
         return idInfoMap[id];
     };
 
+    bool addDataToMap(int id,QString key,QString value,bool isChartData=false){
+        if(!getIdDataMap().contains(id)){//不存在
+            return false;
+        }
+        if(isChartData){ 
+            return getIdDataMap()[id].addToChartData(key,value);
+        }else{
+            return getIdDataMap()[id].addToData(key,value);
+        }
+        return false;
+    };
+
+    //TODO:前端获取DataMap信息
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
     void deviceAdded(int id);
@@ -70,13 +84,26 @@ signals:
 private:
     using IDSet=std::set<int>;
     using IDInfoMap=QMap<int,DeviceInfo>;
-
+    
     QString testStr;
     QFile configFile;
 
     IDSet freeIdSet,idSet;
     
+    /*
+    在创建子线程和添加设备时访问，可以保证线程安全。
+    */
     IDInfoMap idInfoMap;
+
+    /*
+    前端访问，后端写入需要加锁。
+    */
+    std::mutex idDataMapMtx;
+    QMap<int,VariableInfo> idDataMap;
+    QMap<int,VariableInfo>& getIdDataMap(){
+        std::lock_guard<std::mutex> lock(idDataMapMtx);
+        return idDataMap;
+    }
     
     //通过id找到对应信息，要求QML也能访问（用方法实现访问比较好）
 

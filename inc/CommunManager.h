@@ -70,7 +70,11 @@ public:
         std::lock_guard<std::mutex> lock(recvQueueMutex);
         recvQueue.push(msg);
     }
-
+    //Server获取队列中数据,发现好像没必要多此一举套一个CommunMessage
+    void recvData(int id,std::string data){
+        //TODO:解析数据，调用这个函数
+        //DeviceManager::getInstance(nullptr,nullptr)->addDataToMap()
+    }
     
 private:
     void SocketWork(int id,int port);

@@ -9,9 +9,9 @@
             "type": 0,//socket
             "config":["192.168.x.x","8080"],
             "variables":{//变量信息（data还可以细分成即时和表格）
-                "command":["isOn","sendTemperature","isAvaliable"],
-                "data":["temprature","CO2Density"],
-                "dataOnChart":["temprature","luxChange"]
+                "Command":["isOn","sendTemperature","isAvaliable"],
+                "Data":["temprature","CO2Density"],
+                "ChartData":["temprature","luxChange"]
             },
             "variableOnApp":"None"//显示在小图标上的信息，是变量信息的其中之一
         },
@@ -20,9 +20,9 @@
             "type": 1,//ble
             "config":["xxxxxx","xxxx"],
             "variables":{
-                "command":["open","close","start"],
-                "data":["count","check"],
-                "dataOnChart":[]
+                "Command":["open","close","start"],
+                "Data":["count","check"],
+                "ChartData":[]
             },
             "variableOnApp":"Temperature"
         }
