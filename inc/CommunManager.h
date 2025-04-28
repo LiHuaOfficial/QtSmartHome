@@ -45,7 +45,6 @@ public:
     void sendData(int id,std::string variable,bool status){
         sendQueue.push(CommunMessage(id,CommunMessage::TypeData,"{"+variable+":"+(status?"true":"false")+"}"));
     }
-    //TODO:前端获取信息
 
     //---------------for server---------------------------
     //Server获取队列中数据
@@ -64,18 +63,14 @@ public:
         return threadStatusMap[id].first;
     }
 
-    //Server向队列中放入数据
+    //Server从接收队列中获取数据
     void recvData(CommunMessage&& msg){
         qDebug()<<"recv"<<msg.getData();
         std::lock_guard<std::mutex> lock(recvQueueMutex);
         recvQueue.push(msg);
     }
-    //Server获取队列中数据,发现好像没必要多此一举套一个CommunMessage
-    void recvData(int id,std::string data){
-        //TODO:解析数据，调用这个函数
-        //DeviceManager::getInstance(nullptr,nullptr)->addDataToMap()
-    }
-    
+    //Server从接收队列中获取数据,发现好像没必要多此一举套一个CommunMessage
+    void recvData(int id,std::string data);
 private:
     void SocketWork(int id,int port);
 

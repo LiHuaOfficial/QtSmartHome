@@ -34,6 +34,7 @@ public:
         if (dataMap.contains(key))
         {
             dataMap[key]=value;
+            return true;
         }else{
             return false;
         } 
@@ -48,6 +49,7 @@ public:
                 //TODO:储存到本地
 
             }
+            return true;
         }else{
             return false;
         }

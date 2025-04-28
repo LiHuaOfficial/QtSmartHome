@@ -1,15 +1,13 @@
-#include "inc/CommunManager.h"
-#include "inc/DeviceManager.h"
-
-#include "common/QtSmartHomeGlobal.h"
+#include <iostream>
 
 #include <QDebug>
+#include <QByteArray>
 
 #include "boost/asio.hpp"
 
-#include <iostream>
-#include "CommunManager.h"
-
+#include "common/QtSmartHomeGlobal.h"
+#include "inc/CommunManager.h"
+#include "inc/DeviceManager.h"
 #include "SocketServer.h"
 
 CommunManager::CommunManager()
@@ -108,6 +106,27 @@ void CommunManager::deviceEnable(int id)
         default: {
             break;
         }
+    }
+}
+
+void CommunManager::recvData(int id,std::string data){
+    //TODO:解析数据，调用这个函数
+    //DeviceManager::getInstance(nullptr,nullptr)->addDataToMap()
+    QJsonDocument recvDoc=QJsonDocument::fromJson(QByteArray(data.c_str()));
+    QJsonObject rootObj=recvDoc.object();
+    auto variablesMap=rootObj.toVariantMap();
+
+    auto chartData=variablesMap["ChartData"].toMap();
+    auto dataMap=variablesMap["Data"].toMap();
+
+    qDebug()<<"CM:recvData:"<<id<<data;
+    for(auto it=chartData.begin();it!=chartData.end();it++){
+        qDebug()<<"CM:recvChartData:"<<id<<it.key()<<it.value().toString();
+        DeviceManager::getInstance(nullptr,nullptr)->addDataToMap(id,it.key(),it.value().toString(),true);
+    }
+    for(auto it=dataMap.begin();it!=dataMap.end();it++){
+        qDebug()<<"CM:recvData:"<<id<<it.key()<<it.value().toString();
+        DeviceManager::getInstance(nullptr,nullptr)->addDataToMap(id,it.key(),it.value().toString()); 
     }
 }
 

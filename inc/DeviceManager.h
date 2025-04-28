@@ -44,8 +44,11 @@ public:
     //(会不会有被并发访问的问题)从第一个值开始，每调用一次返回一个ID，直到返回-1
     Q_INVOKABLE int orderlyGetID();
 
-    //Map中仅包含variables信息
-    Q_INVOKABLE QVariantMap getDeviceInfo(int id){
+    //Map中仅包含variables信息（效率有点低，考虑优化？）
+    Q_INVOKABLE QVariantMap getDeviceInfo(int id,bool variablesOnly=false){
+        if(variablesOnly){//仅返回variables信息
+            return idInfoMap[id].getDeviceVariablesMap();
+        }
         auto variablesMap=idInfoMap[id].getDeviceVariablesMap();//command,data,dataOnChart
         variablesMap.insert("name",idInfoMap[id].getDeviceName());
         variablesMap.insert("type",idInfoMap[id].getDeviceType());
@@ -57,7 +60,7 @@ public:
         CommunManager::getInstance(nullptr,nullptr)->changeDeviceStatus(id,status);
     }
 
-    //后续实现删除设备的功能要注意这里引用的问题
+    //开始通信后被调用，后续实现删除设备的功能要注意这里引用的问题
     DeviceInfo& getDeviceInfoRaw(int id){
         //由于DeviceInfo没有拷贝构造函数，返回值会报错(值为nullptr好像不会报错？)
         return idInfoMap[id];
@@ -76,6 +79,9 @@ public:
     };
 
     //TODO:前端获取DataMap信息
+    Q_INVOKABLE QString getDeviceData(int id,QString key){
+        return getIdDataMap()[id].getData(key);
+    }
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
     void deviceAdded(int id);

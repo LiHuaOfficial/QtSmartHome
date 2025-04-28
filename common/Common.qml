@@ -5,4 +5,6 @@ QtObject{
     id:common
 
     property bool isFullScreen: false
+
+    property var enableMap:new Map()
 }

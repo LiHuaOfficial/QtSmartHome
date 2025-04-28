@@ -20,7 +20,7 @@ set(QT_QML_GENERATE_QMLLS_INI ON)#generate .qmlls.ini needed by language server,
 find_package(Boost REQUIRED COMPONENTS boost::asio)
 find_package(fmt)
 #set(CMAKE_PREFIX_PATH "D:/Application/Qt/6.8.1/mingw_64")
-find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     MESSAGE("building on Windows")

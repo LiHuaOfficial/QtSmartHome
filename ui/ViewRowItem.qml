@@ -64,7 +64,7 @@ Rectangle{
         Switch {
             width:parent.width/4
             height:parent.height
-            checked: rowItem.itemStatus
+            checked: rowItem.itemStatus==1?true:false
             onCheckedChanged:{
                 rowItem.rowItemTriggered(checked)
             }

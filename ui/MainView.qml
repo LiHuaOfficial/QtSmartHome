@@ -7,6 +7,8 @@ import QtQml
 
 import QtSmartHome 1.0
 
+import "../common"
+
 BaseView {
     id:base
     property int tempInfo: 0
@@ -101,7 +103,8 @@ BaseView {
                              deviceType:infoMap["type"],
                              active:false
                              })
-            base.idIndexMap.set(id,modelApp.count-1)
+            base.idIndexMap[id]=modelApp.count-1
+            Common.enableMap[id]=false
         }
 
     }
@@ -113,7 +116,8 @@ BaseView {
             modelApp.append({deviceid:id,
                              name:infoMap["name"],
                              deviceType:infoMap["type"]})
-            base.idIndexMap.set(id,modelApp.count-1)
+            base.idIndexMap[id]=modelApp.count-1
+            Common.enableMap[id]=false
         }
     }
 
