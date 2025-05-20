@@ -1,6 +1,8 @@
 #ifndef _DEVICE_MANAGER_
 #define _DEVICE_MANAGER_
 
+#include <string>
+
 #include <QtQml>
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
@@ -10,6 +12,7 @@
 #include <qvariant.h>
 #include <set>
 #include <QMap>
+#include <QByteArray>
 
 #include "QtSmartHomeGlobal.h"
 #include "inc/DeviceInfo.h"
@@ -78,9 +81,14 @@ public:
         return false;
     };
 
-    //TODO:前端获取DataMap信息
+    //前端获取DataMap信息
     Q_INVOKABLE QString getDeviceData(int id,QString key){
         return getIdDataMap()[id].getData(key);
+    }
+    //前端发送信息
+    Q_INVOKABLE void sendToDevice(int id,QString key,bool value){
+
+       CommunManager::getInstance(nullptr,nullptr)->sendData(id,key.toStdString(),value);
     }
 signals:
     //所有错误将通过信号和其参数发出,前端全局通知
@@ -89,16 +97,15 @@ signals:
     
 private:
     using IDSet=std::set<int>;
-    using IDInfoMap=QMap<int,DeviceInfo>;
-    
-    QString testStr;
-    QFile configFile;
-
-    IDSet freeIdSet,idSet;
+    IDSet freeIdSet,idSet;  
+    //获取唯一标识设备的ID
+    int getID();
+    bool freeID(int id);
     
     /*
     在创建子线程和添加设备时访问，可以保证线程安全。
     */
+    using IDInfoMap=QMap<int,DeviceInfo>;
     IDInfoMap idInfoMap;
 
     /*
@@ -111,12 +118,12 @@ private:
         return idDataMap;
     }
     
+    QString testStr;
+    QFile configFile;
     //通过id找到对应信息，要求QML也能访问（用方法实现访问比较好）
 
 
-    //获取唯一标识设备的ID
-    int getID();
-    bool freeID(int id);
+
 };
 
 #endif

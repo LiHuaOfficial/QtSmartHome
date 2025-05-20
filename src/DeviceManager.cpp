@@ -8,6 +8,7 @@
 #include <qlogging.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
+#include <QString>
 
 #include "boost/asio.hpp"
 #include <fmt/core.h>
@@ -19,6 +20,8 @@ void ConvertJsonArrayToQVector(QJsonArray &jsonArray, QVector<QString> &vector) 
 }
 DeviceManager::DeviceManager():configFile(QCoreApplication::applicationDirPath()+"/config.json"){
     qDebug()<<configFile.fileName();
+
+    //qDebug()<<boost::asio::ip::host_name();
 
     //初始化所有id以待取用，（初始化移到初始化QMLengine前会不会好些？）
     for(int i=1;i<=MAX_ID_NUM;i++){

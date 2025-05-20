@@ -8,10 +8,10 @@ import "../common"
 BaseView{
     id:deviceView
 
-    property var infoMap
+    property var infoMap//进入时已经赋值，储存变量名
     property int deviceId
     //property var enableMap:new Map()
-    property var dataMap:new Map()
+    //property var dataMap:new Map()
 
     readonly property color enableColor:"black"
     readonly property color disableColor:ColorStyle.greyLight3
@@ -42,7 +42,7 @@ BaseView{
         
         anchors.horizontalCenter:parent.horizontalCenter 
 
-        checked:Common.enableMap[deviceView.deviceId]
+        checked:Common.enableMap[deviceView.deviceId]//忽略未初始化报错
 
         onCheckedChanged:{
             if(checked==true){
@@ -90,11 +90,17 @@ BaseView{
         timer.running=true;
         //刷新信息框所有信息
         dataModel.clear()
-
+        
+        //为Data类型变量添加条目
         deviceView.infoMap["Data"].forEach(function (item, index) {
             console.log("refresh data",item)
-            dataMap[item]="-"
-            dataModel.append({variableName:item,variableValue:dataMap[item]})
+            dataModel.append({variableName:item,variableValue:"-"})
+        })
+
+        //为Command类型变量添加条目
+        deviceView.infoMap["Command"].forEach(function (item, index) {
+            console.log("refresh command",item)
+            commandModel.append({variableName:item})
         })
     }
 
@@ -116,24 +122,96 @@ BaseView{
             anchors.left:parent.left
             
             //color:"red"
+
+
             width:parent.width/2
-            height:parent.height
+            height:parent.height/2
             ListView{
-                id:dataView
+                id:dataView//显示所有data类型变量
                 anchors.fill:parent
+                
+                //spacing:2
 
                 model:ListModel{
                     id:dataModel
                 }
 
-                delegate:Text{
+                delegate:Rectangle{
+                    id:dataRect
                     required property string variableName
                     required property string variableValue
+    
+                    //color:"red"
+                    border.color:ColorStyle.greyLight4
+                    border.width:1
+                    
+                    width:dataView.width
+                    height:dataViewRect.height/3
+                    Text{
+                        anchors.verticalCenter:parent.verticalCenter
+                        anchors.rightMargin:parent.width/10
+                        text:dataRect.variableName+":"+dataRect.variableValue
+                        
+                        font.pixelSize:height*0.8
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id:commandViewRect
 
-                    text:variableName+":"+variableValue
+            anchors.top:dataViewRect.bottom
+
+            width:parent.width/2
+            height:parent.height/2
+
+            //color:"blue"
+
+            ListView{
+                id:commandView//显示所有cmd类型变量
+                anchors.fill:parent
+                
+                //spacing:2
+
+                model:ListModel{
+                    id:commandModel
+                }
+
+                delegate:Rectangle{
+                    id:commandRect
+                    required property string variableName
+    
+                    //color:"red"
+                    border.color:ColorStyle.greyLight4
+                    border.width:1
 
                     width:dataView.width
-                    height:20
+                    height:dataViewRect.height/3
+                    Text{
+                        id:commandText
+                        anchors.verticalCenter:parent.verticalCenter
+                        anchors.rightMargin:parent.width/10
+                        text:commandRect.variableName
+                        
+                        font.pixelSize:height*0.8
+                    }
+                    Switch{
+                        id:commandSwitch
+                        anchors.right:parent.right
+                        anchors.verticalCenter:parent.verticalCenter
+
+                        width:parent.width/4
+                        height:parent.height/2
+
+    
+                        onCheckedChanged:{
+                            if(checked==true){
+                                DeviceManager.sendToDevice(deviceView.deviceId,commandRect.variableName,true)
+                            }else{
+                                DeviceManager.sendToDevice(deviceView.deviceId,commandRect.variableName,false)
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -8,12 +8,8 @@
 //接收
 {
     "Data":{
-    "temprature":26.1,
-    "CO2Density":0.26
-    },
-    "ChartData":{
-        "temprature":11,
-        "luxChange":20
+    "hello":"hello from phone",
+    "data1":13
     }
 }
 
