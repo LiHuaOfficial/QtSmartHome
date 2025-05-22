@@ -43,6 +43,7 @@ BaseView {
                 choosedComponent: 'comboBox'
                 componentDiscription: qsTr("Language")
                 comboBoxList: ['中文', 'English']
+                itemStatus: 1
             }
             Connections{
                 target:languageItem
@@ -53,6 +54,7 @@ BaseView {
             ViewRowItem{
                 id:textAreaItem
                 choosedComponent: 'textArea'
+                componentDiscription: qsTr("MAX devices")
             }
             Connections{
                 target:textAreaItem
@@ -62,6 +64,7 @@ BaseView {
             }
             ViewRowItem{
                 choosedComponent: 'switch'
+                componentDiscription: qsTr("Allow input")
             }
             ViewRowItem{
                 id:testRowItem

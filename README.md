@@ -12,3 +12,4 @@ control custom home device
 - cmake插件选择preset后直接编译
 ## TODO
 - 显示本机ip
+- 设备好像不会显示断联？

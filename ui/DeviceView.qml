@@ -130,7 +130,7 @@ BaseView{
                 id:dataView//显示所有data类型变量
                 anchors.fill:parent
                 
-                //spacing:2
+                clip:true
 
                 model:ListModel{
                     id:dataModel
@@ -172,6 +172,7 @@ BaseView{
                 anchors.fill:parent
                 
                 //spacing:2
+                clip:true
 
                 model:ListModel{
                     id:commandModel
